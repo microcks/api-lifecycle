@@ -1,0 +1,17 @@
+/*
+ * Sample config file for the Beer UI
+ *
+ * Usage: edit this file and save it as "config.js"
+ */
+define(function(require, exports, module) {
+  module.exports = {
+    // The base URL of the Beer API
+    baseURL: "http://microcks/rest/Beer%20Catalog%20API/0.9",
+
+    // If a user-key is required, you can pass it as HTTP Header:
+    additionalHeaders: { "user-key": "<YOUR USER KEY HERE>" },
+
+    // Or in the Query String
+    extraQueryStringSuffix: "user_key=<YOUR USER KEY HERE>"
+  };
+});

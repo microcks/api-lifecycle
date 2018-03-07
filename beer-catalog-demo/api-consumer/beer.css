@@ -1,0 +1,61 @@
+body {
+  font-family: "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Roboto", sans-serif;
+
+  /* Zoom page at 300% */
+  zoom: 3;
+  -moz-transform: scale(3);
+  -moz-transform-origin: 0 0;
+
+  /* Homebrew.sh colors */
+  color: #f9d094;
+  background: #2e2a24;
+}
+
+ul {
+  list-style: none;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 900;
+}
+
+img {
+  height: 128px;
+  width: 128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flag {
+  margin-right: 10px;
+}
+
+.status_out_of_stock {
+  text-decoration: line-through;
+}
+
+.rating {
+  float: right;
+  margin-right: 30px;
+  font-size: 50%;
+}
+
+.error {
+  text-align: center;
+}
+
+.error h1 {
+  font-size: 400%;
+  margin-bottom: -10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.refresh {
+  text-align: center;
+  font-size: 200%;
+}

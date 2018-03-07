@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Beer Catalog</title>
+    <script type='text/javascript' src='https://code.jquery.com/jquery-3.1.1.js'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.js'></script>
+    <script type='text/javascript'>
+    require(['beer'], function (loadBeers) {
+      $(document).ready(function() {
+        $(".refresh").on("click", loadBeers);
+        loadBeers();
+      });
+    });
+    </script>
+    <link rel="stylesheet" type="text/css" href="beer.css">
+  </head>
+  <body>
+    <img src="brew.png" />
+    <h1>BEER CATALOG</h1>
+    <div class="catalog">
+      <ul>
+      </ul>
+      <div class="refresh">🔄</div>
+    </div>
+    <img src="https://media.giphy.com/media/x7IqIRf6pNR2E/giphy.gif" class="throbber hidden" />
+    <div class="error hidden">
+      <h1>⚠️</h1>
+      <span id="error_message"></span>
+      <div class="refresh">🔄</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+define(function(require, exports, module) {
+  module.exports = {
+    "Austria": "🇦🇹",
+    "Belgium": "🇧🇪",
+    "Bulgaria": "🇧🇬",
+    "Croatia": "🇭🇷",
+    "Cyprus": "🇨🇾",
+    "The Czech Republic": "🇨🇿",
+    "Denmark": "🇩🇰",
+    "Estonia": "🇪🇪",
+    "Finland": "🇫🇮",
+    "France": "🇫🇷",
+    "Germany": "🇩🇪",
+    "Gibraltar": "🇬🇮",
+    "Greece": "🇬🇷",
+    "Hungary": "🇭🇺",
+    "Ireland": "🇮🇪",
+    "Italy": "🇮🇹",
+    "Latvia": "🇱🇻",
+    "Lithuania": "🇱🇹",
+    "Luxembourg": "🇱🇺",
+    "Malta": "🇲🇹",
+    "The Netherlands": "🇳🇱",
+    "Poland": "🇵🇱",
+    "Portugal": "🇵🇹",
+    "România": "🇷🇴",
+    "Slovakia": "🇸🇰",
+    "Slovenia": "🇸🇮",
+    "Spain": "🇪🇸",
+    "Sweden": "🇸🇪",
+    "United Kingdom": "🇬🇧"
+  };
+});
