@@ -5,7 +5,7 @@ metadata:
   labels:
     name: beer-catalog-pipeline
   annotations:
-    pipeline.alpha.openshift.io/uses: '[{"name": "beer-catalog-impl", "namespace": "", "kind": "DeploymentConfig"}]'
+    pipeline.alpha.openshift.io/uses: '[{"name": "beer-catalog-impl", "namespace": "beer-catalog-dev", "kind": "DeploymentConfig"}]'
 spec:
   triggers:
     -
