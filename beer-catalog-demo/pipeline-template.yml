@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: beer-catalog-pipeline
+  labels:
+    name: beer-catalog-pipeline
+  annotations:
+    pipeline.alpha.openshift.io/uses: '[{"name": "beer-catalog-impl", "namespace": "", "kind": "DeploymentConfig"}]'
+spec:
+  triggers:
+    -
+      type: GitHub
+      github:
+        secret: secret101
+    -
+      type: Generic
+      generic:
+        secret: secret101
+  runPolicy: Serial
+  source:
+    type: None
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        node('maven') {
+          stage ('buildInDev') {
+            openshiftBuild(buildConfig: 'beer-catalog-impl', namespace: 'beer-catalog-dev', showBuildLogs: 'true')
+          }
+          stage ('deployInDev') {
+            openshiftDeploy(namespace: 'beer-catalog-dev', deploymentConfig: 'beer-catalog-impl')
+          }
+          stage ('testInDev') {
+            // Add Microcks test here.
+            microcksTest(apiURL: 'http://<microcks-url>/api',
+              serviceId: 'Beer Catalog API:0.9',
+              testEndpoint: 'http://<beer-catalog-impl-beer-catalog-dev-url>/api/',
+              runnerType: 'POSTMAN', verbose: 'true')
+          }
+          stage ('promoteToProd') {
+            openshiftTag(namespace: 'beer-catalog-dev', sourceStream: 'beer-catalog-impl',  sourceTag: 'latest', destinationStream: 'beer-catalog-impl', destinationTag: 'promoteToProd')
+          }
+          stage ('deployToProd') {
+            openshiftDeploy(deploymentConfig: 'beer-catalog-impl', namespace: 'beer-catalog-prod')
+            openshiftScale(deploymentConfig: 'beer-catalog-impl', namespace: 'beer-catalog-prod', replicaCount: '2')
+          }
+        }
+  output:
+  resources:
+  postCommit:
