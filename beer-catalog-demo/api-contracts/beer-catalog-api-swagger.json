@@ -22,6 +22,7 @@
         ],
         "summary": "Get beer having name",
         "description": "Get beer having name",
+        "operationId": "GetBeer",
         "responses": {
           "200": {
             "description": "Beer having requested name",
@@ -48,6 +49,7 @@
         ],
         "summary": "Get beers having status",
         "description": "Get beers having status",
+        "operationId": "FindBeersByStatus",
         "responses": {
           "200": {
             "description": "List of beers having requested status",
@@ -83,6 +85,7 @@
         ],
         "summary": "List beers within catalog",
         "description": "List beers within catalog",
+        "operationId": "ListBeers",
         "responses": {
           "200": {
             "description": "Array of beers",
