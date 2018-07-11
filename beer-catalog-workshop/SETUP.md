@@ -100,8 +100,27 @@ $ ansible-playbook -i inventory install.yml -e dockerhub_version=1.0.6 \
 
 > Note: Ansible Tower containers requested resources may be considered a little high for a simple workshop. You may to lower them if you're resources constraint, in particular if using CDK. You may edit DeployConfig and lower them.
 
-
 Wait for deployment to be finished.
+
+### 4/ Concfigurer projet and job in AWC
+
+Login on AWX with user you just created, go to the *Projects* section and add a new project with following properties :
+* Name: `Deploy API to 3scale`
+* Description: `Enable continuous deployment of an API to 3scale AMP`
+* Organization: `default`
+* SCM Type: `Git`
+* SCM URL: `https://github.com/nmasse-itix/threescale-cicd-awx`
+* SCM Branch/Tag/Commit: `master`
+
+You can also tick `Update Revision on Launch` and setup a cache timeout.
+
+Then you have to add a new *Job Template* with following properties :
+* Name: `Deploy an API to 3scale`
+* Project: `Deploy API to 3scale`
+* Playbook: `deploy-api.yml`
+* Inventory: `Prompt on Launch`
+* Extra-variables: `Prompt on Launch`
+
 
 ## Microcks setup
 
@@ -136,7 +155,7 @@ $ oc new-app --template=microcks-persistent --param=APP_ROUTE_HOSTNAME=microcks-
 $ oc process -f https://raw.githubusercontent.com/microcks/microcks-jenkins-plugin/master/openshift-jenkins-master-bc.yml | oc create -f -
 ```
 
-Wait for build to finish
+Wait for build to finish.
 
 ### 5/ Deploy a Jenkins instance with this custom Master image
 
@@ -156,3 +175,8 @@ Once Jenkins instance has been setup in previous step, you finally need to confi
 Then click on *Credentials* > *System*, click on *Global credentials (unrestricted)* and select *Add Credentials...* . Fill-in your Tower Admin login and password, and choose `tower-admin` for the id field.
 
 ![Jenkins Ansible setup](./assets/jenkins-ansible-user.png)
+
+
+## OpenShift for running Workshop
+
+Create a bunch of users (from `user01` to `user10` for example) so that they will be autohrized to authenticate and create projects if you plan to let them do that. See [Variants in overview](./README.md)).
