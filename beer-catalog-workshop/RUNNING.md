@@ -64,7 +64,23 @@ Wait for some minutes for deployment. Then you can just grab the created OpenShi
 
 > To put even more emphasis onto the contract-first approach, it is possible to illustrate the generation of a skeleton application using contract. APIcurio as new nice feature that allows to generate a [Thorntail](https://thorntail.io/) app from the GUI. We have also run this workshop using the contract-first approach to generate a Fuse/Apache Camel application based on contracts.
 
-
 ## Stage 6: DEPLOY
+
+It is now time to create and/or explore the other TEST and PROD environments. This is the appropriate time for discussing: environment provisionning process, how much time it takes, the part of it that is automated or not, ...
+
+If you do not have already created everything in advance for your attendees, you may want to let them do everything. There are many ways of running this and we prepared a few materials for this:
+
+* There's a `deploy-envs.sh` [shell script](./deploy-envs.sh) provided in this repository that may create everything for you, both the TEST and PROD environments as well as all the `DeploymentConfig` for this environment. User should be logged into OpenShift before executing it. Depending on your Infrastructure setup, you may want to run this shell with 1 or 2 arguments:
+  * 1st argument is the `USER` within OpenShift plateform, so that everything project will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
+  * 2nd argument if the name of the project the Microcks instance is deployed. This can be a generic transversal instance or one that is specific to your user.
+
+* There's an `env-template.yaml` [OpenShift template](./env-template.yaml) provided in this repository that you may want to load into the common `openshift` namespace and then the attendee may use 2 times to initialize both the TEST and PROD environment
+  * Remember that before being able to actually deploy stuffs, the service accounts of this projects should be allowed to pull images from DEV one. So you'll have to execute following commands to allow this:
+  ```sh
+  oc adm policy add-role-to-group system:image-puller system:serviceaccounts:${TEST_ENV} -n ${DEV_ENV}
+  oc adm policy add-role-to-group system:image-puller system:serviceaccounts:${PROD_ENV} -n ${DEV_ENV}
+  ```
+
+
 
 ## Stage 7: SECURE
