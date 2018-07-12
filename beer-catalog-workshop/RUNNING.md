@@ -62,25 +62,43 @@ Then deploy the API implementation using `Red Hat OpenJDK 8` template with this 
 
 Wait for some minutes for deployment. Then you can just grab the created OpenShift route for application, realize a test through Microcks *NEW TEST* feature. If using the reference implementation above, you'll have to append an `/api` suffix to the route in order to reach out implementation endpoint for API.
 
-> To put even more emphasis onto the contract-first approach, it is possible to illustrate the generation of a skeleton application using contract. APIcurio as new nice feature that allows to generate a [Thorntail](https://thorntail.io/) app from the GUI. We have also run this workshop using the contract-first approach to generate a Fuse/Apache Camel application based on contracts.
+> To put even more emphasis on the contract-first approach, it is possible to illustrate the generation of a skeleton application using contract. APIcurio as new nice feature that allows to generate a [Thorntail](https://thorntail.io/) app from the GUI. We have also run this workshop using the contract-first approach to generate a Fuse/Apache Camel application based on contracts.
 
 ## Stage 6: DEPLOY
 
-It is now time to create and/or explore the other TEST and PROD environments. This is the appropriate time for discussing: environment provisionning process, how much time it takes, the part of it that is automated or not, ...
+This is the big part! It is now time to create and/or explore the other TEST and PROD environments. This is the appropriate time for discussing: environment provisioning process, how much time it takes, the part of it that is automated or not, ...
+
+### Prepare OpenShift environments
 
 If you do not have already created everything in advance for your attendees, you may want to let them do everything. There are many ways of running this and we prepared a few materials for this:
 
 * There's a `deploy-envs.sh` [shell script](./deploy-envs.sh) provided in this repository that may create everything for you, both the TEST and PROD environments as well as all the `DeploymentConfig` for this environment. User should be logged into OpenShift before executing it. Depending on your Infrastructure setup, you may want to run this shell with 1 or 2 arguments:
   * 1st argument is the `USER` within OpenShift plateform, so that everything project will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
-  * 2nd argument if the name of the project the Microcks instance is deployed. This can be a generic transversal instance or one that is specific to your user.
+  * 2nd argument if the name of the OpenShift project the Microcks instance is deployed. This can be a generic common instance or one that is specific to your user.
 
-* There's an `env-template.yaml` [OpenShift template](./env-template.yaml) provided in this repository that you may want to load into the common `openshift` namespace and then the attendee may use 2 times to initialize both the TEST and PROD environment
+* There's a `env-template.yaml` [OpenShift template](./env-template.yaml) provided in this repository that you may want to load into the common `openshift` namespace and then the attendee may use 2 times to initialize both the TEST and PROD environment
   * Remember that before being able to actually deploy stuffs, the service accounts of this projects should be allowed to pull images from DEV one. So you'll have to execute following commands to allow this:
   ```sh
   oc adm policy add-role-to-group system:image-puller system:serviceaccounts:${TEST_ENV} -n ${DEV_ENV}
   oc adm policy add-role-to-group system:image-puller system:serviceaccounts:${PROD_ENV} -n ${DEV_ENV}
   ```
 
+### Deploy 3scale in TEST and PROD
+
+Depending on what you want to demonstrate regarding 3scale API Management deployment features, we'll provide 2 types of templates:
+* There's `apicast-template.yaml` that will allow you to deploy 2 APIcast gateways within your environment: one for staging and one for production. The staging gateway is indeed used for illustrating smoke test during a continuous API deployment onto API Management backend,
+* There's `apicast-simple-template.yaml` that is a simpler version of the previous one without staging environment. As we already have a TEST environment, we may sometime consider staging of API deployment on backend as a optional step.
+
+Both YAML files define a template named `beer-catalog-apicast` and can be used into TEST and PROD environment to deploy what you need. They both take the same parameters your attendees will need to provide:
+* `USERNAME` that is the OpenShift/Kubernetes user of your attendee (`user01` to `user10` for instance),
+* `TENANT` is the name of the 3scale account/tenant that is used in the 3scale hosted SaaS backend,
+* `ACCESS_TOKEN` is an aacess token to 3scale API Management backend. Please review [3scale documentation on access tokens](https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html-single/accounts/index#access_tokens).
+
+> Take car to use the chosen template on both environment so that we'll be able to demonstrate the continuous deployment and promotion of API Management policies and configuration between 2 environments TEST and PROD.
+
+### Deploy CI/CD pipeline
+
+### Execute everything
 
 
 ## Stage 7: SECURE

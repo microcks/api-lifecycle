@@ -1,0 +1,239 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: beer-catalog-apicast
+metadata:
+  annotations:
+    description: 3scale APIcast for Beer Catalog Workshop
+    iconClass: icon-load-balancer
+    tags: api,gateway,3scale
+  name: beer-catalog-apicast
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: apicast-config
+  stringData:
+    password: https://${ACCESS_TOKEN}@${TENANT}-admin.3scale.net/
+  type: Opaque
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APICAST_NAME}-production
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: ${APICAST_NAME}-production
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          deploymentconfig: ${APICAST_NAME}-production
+      spec:
+        containers:
+        - env:
+          - name: THREESCALE_PORTAL_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: apicast-config
+          - name: THREESCALE_DEPLOYMENT_ENV
+            value: production
+          - name: APICAST_CONFIGURATION_LOADER
+            value: boot
+          - name: APICAST_LOG_LEVEL
+            value: warn
+          - name: APICAST_RESPONSE_CODES
+            value: "true"
+          - name: APICAST_BACKEND_CACHE_HANDLER
+            value: resilient
+          - name: APICAST_CONFIGURATION_CACHE
+            value: "60"
+          - name: OPENSSL_VERIFY
+            value: "false"
+          image: ${IMAGE_NAME}
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /status/live
+              port: management
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+          name: ${APICAST_NAME}-production
+          ports:
+          - containerPort: 8080
+            name: proxy
+            protocol: TCP
+          - containerPort: 8090
+            name: management
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status/ready
+              port: management
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${APICAST_NAME}-production
+  spec:
+    ports:
+    - name: proxy
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: management
+      port: 8090
+      protocol: TCP
+      targetPort: 8090
+    selector:
+      deploymentconfig: ${APICAST_NAME}-production
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: beer-catalog-v1
+  spec:
+    port:
+      targetPort: proxy
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: ${APICAST_NAME}-production
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: beer-catalog-v2
+  spec:
+    port:
+      targetPort: proxy
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: ${APICAST_NAME}-production
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APICAST_NAME}-staging
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: ${APICAST_NAME}-staging
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          deploymentconfig: ${APICAST_NAME}-staging
+      spec:
+        containers:
+        - env:
+          - name: THREESCALE_PORTAL_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: apicast-config
+          - name: THREESCALE_DEPLOYMENT_ENV
+            value: staging
+          - name: APICAST_CONFIGURATION_LOADER
+            value: lazy
+          - name: APICAST_LOG_LEVEL
+            value: info
+          - name: APICAST_RESPONSE_CODES
+            value: "false"
+          - name: APICAST_CONFIGURATION_CACHE
+            value: "0"
+          - name: OPENSSL_VERIFY
+            value: "false"
+          image: ${IMAGE_NAME}
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /status/live
+              port: management
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+          name: ${APICAST_NAME}-staging
+          ports:
+          - containerPort: 8080
+            name: proxy
+            protocol: TCP
+          - containerPort: 8090
+            name: management
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status/ready
+              port: management
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${APICAST_NAME}-staging
+  spec:
+    ports:
+    - name: proxy
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: management
+      port: 8090
+      protocol: TCP
+      targetPort: 8090
+    selector:
+      deploymentconfig: ${APICAST_NAME}-staging
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: beer-catalog-v1-staging
+  spec:
+    port:
+      targetPort: proxy
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: ${APICAST_NAME}-staging
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: beer-catalog-v2-staging
+  spec:
+    port:
+      targetPort: proxy
+    tls:
+      insecureEdgeTerminationPolicy: Allow
+      termination: edge
+    to:
+      kind: Service
+      name: ${APICAST_NAME}-staging
+parameters:
+- description: Docker image to use.
+  name: IMAGE_NAME
+  required: true
+  value: quay.io/3scale/apicast:v3.2.0
+- description: Name for the 3scale API Gateway
+  name: APICAST_NAME
+  required: true
+  value: apicast
+- description: A 3scale Access Token having read-only access to the Account Management
+    API
+  name: ACCESS_TOKEN
+  required: true
+- description: The name of your 3scale tenant
+  name: TENANT
+  required: true
+- description: Your username (user01, user02, etc.)
+  name: USERNAME
+  required: true
