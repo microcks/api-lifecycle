@@ -94,9 +94,11 @@ Both YAML files define a template named `beer-catalog-apicast` and can be used i
 * `TENANT` is the name of the 3scale account/tenant that is used in the 3scale hosted SaaS backend,
 * `ACCESS_TOKEN` is an aacess token to 3scale API Management backend. Please review [3scale documentation on access tokens](https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html-single/accounts/index#access_tokens).
 
-> Take car to use the chosen template on both environment so that we'll be able to demonstrate the continuous deployment and promotion of API Management policies and configuration between 2 environments TEST and PROD.
+> Take care applying the chosen template on both environment so that we'll be able to demonstrate the continuous deployment and promotion of API Management policies and configuration between 2 environments TEST and PROD.
 
 ### Deploy CI/CD pipeline
+
+> For simple test in single tenant mode (where each attendee use its own instance), we're also providing the `cicd-pipeline-no-param-template.yaml` 
 
 ### Execute everything
 

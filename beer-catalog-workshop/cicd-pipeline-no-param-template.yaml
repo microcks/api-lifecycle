@@ -1,0 +1,102 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: beer-catalog-pipeline
+metadata:
+  annotations:
+    description: Beer Catalog Deployment Pipeline
+  name: beer-catalog-pipeline
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      name: beer-catalog-pipeline
+    name: beer-catalog-pipeline
+  spec:
+    output: null
+    postCommit: null
+    resources: null
+    runPolicy: Serial
+    source:
+      type: None
+    strategy:
+      jenkinsPipelineStrategy:
+        env:
+        - name: GIT_BRANCH
+          value: master
+        - name: GIT_REPO
+          value: https://github.com/microcks/api-lifecycle.git
+        - name: ANSIBLE_TEST_INVENTORY
+          value: 3scale-test
+        - name: ANSIBLE_PROD_INVENTORY
+          value: 3scale-prod
+        - name: ANSIBLE_JOB_TEMPLATE
+          value: Deploy an API to 3scale
+        - name: TOWER_SERVER
+          value: tower
+        jenkinsfile: |-
+          #!/usr/bin/env groovy
+          import groovy.json.JsonOutput
+
+          node('nodejs') {
+            def towerExtraVars = [
+                git_repo: params.GIT_REPO,
+                git_branch: params.GIT_BRANCH,
+                openapi_file: "beer-catalog-demo/api-contracts/beer-catalog-api-swagger.json",
+                threescale_cicd_openapi_smoketest_operation: "GetBeers",
+                threescale_cicd_api_backend_scheme: "http",
+                threescale_cicd_openapi_file_format: "json"
+            ]
+
+            stage ('Build in Dev') {
+              openshiftBuild(buildConfig: 'beer-catalog-impl',
+                namespace: 'beer-catalog-dev', showBuildLogs: 'true')
+            }
+            stage ('Deploy in Dev') {
+              openshiftDeploy(namespace: 'beer-catalog-dev',
+                deploymentConfig: 'beer-catalog-impl')
+            }
+
+            stage('Test in Dev') {
+              // Add implementation contract test here.
+              /*
+              microcksTest(apiURL: 'http://microcks-microcks.40.113.129.20.nip.io/api',
+                serviceId: 'Beer Catalog API:0.9',
+                testEndpoint: 'http://beer-catalog-impl-beer-catalog-dev.40.113.129.20.nip.io/api/',
+                runnerType: 'POSTMAN', verbose: 'true')
+              */
+            }
+
+            stage ('Promote to Test') {
+              openshiftTag(namespace: 'beer-catalog-dev', sourceStream: 'beer-catalog-impl',
+                sourceTag: 'latest', destinationStream: 'beer-catalog-impl', destinationTag: 'promoteToTest')
+            }
+
+            stage('Deploy to Test') {
+              openshiftDeploy(deploymentConfig: 'beer-catalog-impl', namespace: 'beer-catalog-test')
+              // Deploy the API to 3scale
+              ansibleTower towerServer: params.TOWER_SERVER,
+                          inventory: params.ANSIBLE_TEST_INVENTORY,
+                          jobTemplate: params.ANSIBLE_JOB_TEMPLATE,
+                          extraVars: JsonOutput.toJson(towerExtraVars)
+
+            }
+
+            stage ('Promote to Prod') {
+              openshiftTag(namespace: 'beer-catalog-dev', sourceStream: 'beer-catalog-impl',
+                sourceTag: 'latest', destinationStream: 'beer-catalog-impl', destinationTag: 'promoteToProd')
+            }
+
+            stage('Deploy to Prod') {
+              openshiftDeploy(deploymentConfig: 'beer-catalog-impl', namespace: 'beer-catalog-prod')
+              openshiftScale(deploymentConfig: 'beer-catalog-impl', namespace: 'beer-catalog-prod', replicaCount: '2')
+              // Deploy the API to 3scale
+              ansibleTower towerServer: params.TOWER_SERVER,
+                          inventory: params.ANSIBLE_PROD_INVENTORY,
+                          jobTemplate: params.ANSIBLE_JOB_TEMPLATE,
+                          extraVars: JsonOutput.toJson(towerExtraVars)
+            }
+
+          }
+      type: JenkinsPipeline
