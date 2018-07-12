@@ -9,7 +9,7 @@
 * Ability to install system utilities (`curl`, `git`, `sed`, `jq`) on laptop or remote machine
 * An OpenShift cluster with enough resources for instantiating ~15 pods using 3 GB RAM per attendee / group of attendees
 
-## System utilities setup
+## Utilities setup
 
 ### On Linux
 Depending on your distribution, you should be able to install `jq` through your package manager.
@@ -41,7 +41,11 @@ Then, when Homebrew is setup, just run this command to install jq (everything el
 $ brew install jq
 ```
 
-### Pre-Lab Setup
+### On both
+
+Install Postman by getting the appropriate released binary here: https://www.getpostman.com/apps
+
+### Pre-Lab Infrastructure Setup
 
 ## Ansible Tower setup
 
@@ -66,7 +70,7 @@ spec:
 EOF
 ```
 
-### 2/ Clone the Git repositoriesfor
+### 2/ Clone the Git repositories
 
 Retrieve community AWX and associated logos
 
@@ -102,7 +106,7 @@ $ ansible-playbook -i inventory install.yml -e dockerhub_version=1.0.6 \
 
 Wait for deployment to be finished.
 
-### 4/ Concfigurer projet and job in AWC
+### 4/ Configure projet and job in AWC
 
 Login on AWX with user you just created, go to the *Projects* section and add a new project with following properties :
 * Name: `Deploy API to 3scale`
@@ -120,6 +124,27 @@ Then you have to add a new *Job Template* with following properties :
 * Playbook: `deploy-api.yml`
 * Inventory: `Prompt on Launch`
 * Extra-variables: `Prompt on Launch`
+
+### 5/ Declare inventories
+
+For each of your 3scale API Management backend tenant, you will have to declare an inventory into AWX.
+
+This are simple inventory that should
+* Declare just one variable that is `ansible_connection` with the `local` value
+* Declare one group called `threescale` that holds configuration described in YAML for your access token to 3scale API Management backend, the name of environment as well as the wildcard that will be used to serve Gateway through Route. For instance :
+
+```YAML
+---
+threescale_cicd_access_token: 1a56231afd41974e61428922460c493575b756f63b1bb5d306f561e4a1c12ab1
+threescale_cicd_env: prod
+threescale_cicd_wildcard_domain: 192.168.99.100.nip.io
+```
+* Declare one host in this group that is the 3scale API Management server we’ll use for deploying our API. For example: `lbroudou-redhat-admin.3scale.net`
+
+
+We propose creating just 2 inventories right now in order to test everything out :
+* 3scale-test
+* 3scale-prod
 
 
 ## Microcks setup
