@@ -27,4 +27,44 @@ Many ways of doing things:
 * Let attendees clone the reference and import it in their Postman instance, change API name and version if you plan to use the same Microcks instance,
 * Import the API contract designed on **Stage 2** and make attendees create their samples step by step.
 
-> If you choose one of the two latest options, be really careful about the respect of conventions regarding version property in Postman to allow smooth import into Microcks later.
+> If you choose one of the two latest options, be really careful about the respect of conventions regarding version property in Postman to allow smooth import into Microcks.
+
+At the end of this stage, you should have running mocks into Microcks. You may want attendees to test a bunch of CURL commands to illustrate that mocks are up and running. Using the reference Postman Collection, here are a bunch of commands (they assume running on a local CDK instance and should be adapted to your environment)
+
+```sh
+curl -X GET 'http://microcks-microcks.192.168.99.100.nip.io/rest/Beer%20Catalog%20API/0.9/beer/Weissbier'
+
+curl -X GET 'http://microcks-microcks.192.168.99.100.nip.io/rest/Beer%20Catalog%20API/0.9/beer?page=0'
+
+curl -X GET 'http://microcks-microcks.192.168.99.100.nip.io/rest/Beer%20Catalog%20API/0.9/beer?page=1'
+
+curl -X GET 'http://microcks-microcks.192.168.99.100.nip.io/rest/Beer%20Catalog%20API/0.9/beer/findByStatus/available'
+```
+
+## Stage 4: TEST
+
+During the exploration of this stage, you may want to discuss: different types of tests (from Logical Unit Test to System-wide Functional Tests/User Acceptance Test), have a focus on Integration Tests and Contracts Tests, how business expectations are different to semantic validations, what is the best appropriate time to execute each kind of tests, ...
+
+In this stage you may just explore the [reference Postman Collection](https://raw.githubusercontent.com/microcks/api-lifecycle/master/beer-catalog-demo/api-contracts/Beer%20Catalog%20API.postman_collection.json) or add test to the attendee variants you have created earlier in **Stage 3**.
+
+You may want to explore the test feature of Microcks by running a manual tests against the mock endpoint itself ;-)
+
+## Stage 5: IMPLEMENT
+
+In this stage we will deploy a first implementation of our API. A reference implementation using Spring Boot is provided here https://github.com/microcks/api-lifecycle/tree/master/beer-catalog-demo/api-implementation.
+
+If you have not pre-populated all the OpenShift/Kubernetes environments, it's time making your attendees create a new environment. They may just login on OpenShift console and create a `${user}-beer-catalog-dev` environment with display name `Beer Catalog (DEV) - ${user}`.
+
+Then deploy the API implementation using `Red Hat OpenJDK 8` template with this parameters :
+* App Name : `beer-catalog-impl`
+* Source Repo : `https://github.com/microcks/api-lifecycle.git`
+* Source Context Dir : `/beer-catalog-demo/api-implementation`
+
+Wait for some minutes for deployment. Then you can just grab the created OpenShift route for application, realize a test through Microcks *NEW TEST* feature. If using the reference implementation above, you'll have to append an `/api` suffix to the route in order to reach out implementation endpoint for API.
+
+> To put even more emphasis onto the contract-first approach, it is possible to illustrate the generation of a skeleton application using contract. APIcurio as new nice feature that allows to generate a [Thorntail](https://thorntail.io/) app from the GUI. We have also run this workshop using the contract-first approach to generate a Fuse/Apache Camel application based on contracts.
+
+
+## Stage 6: DEPLOY
+
+## Stage 7: SECURE
