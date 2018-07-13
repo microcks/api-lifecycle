@@ -131,20 +131,19 @@ For each of your 3scale API Management backend tenant, you will have to declare 
 
 This are simple inventory that should
 * Declare just one variable that is `ansible_connection` with the `local` value
-* Declare one group called `threescale` that holds configuration described in YAML for your access token to 3scale API Management backend, the name of environment as well as the wildcard that will be used to serve Gateway through Route. For instance :
+* Declare one group called `threescale` that holds configuration described in YAML for your access token to 3scale API Management backend, the name of environment as well as the wildcard that will be used to serve Gateway through Route. Please check [3scale documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html-single/accounts/index#access_tokens) on how to get an access token. For instance :
 
 ```YAML
 ---
-threescale_cicd_access_token: 1a56231afd41974e61428922460c493575b756f63b1bb5d306f561e4a1c12ab1
+threescale_cicd_access_token: <3scale_access_token>
 threescale_cicd_env: prod
 threescale_cicd_wildcard_domain: 192.168.99.100.nip.io
 ```
 * Declare one host in this group that is the 3scale API Management server we’ll use for deploying our API. For example: `lbroudou-redhat-admin.3scale.net`
 
-
 We propose creating just 2 inventories right now in order to test everything out :
-* 3scale-test
-* 3scale-prod
+* `3scale-test` will be used as the base inventory when launching the Tower job to deploy API to TEST environment,
+* `3scale-prod` will be used as the base inventory when launching the Tower job to deploy API to PROD environment.
 
 
 ## Microcks setup

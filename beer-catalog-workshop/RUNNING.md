@@ -98,9 +98,35 @@ Both YAML files define a template named `beer-catalog-apicast` and can be used i
 
 ### Deploy CI/CD pipeline
 
-> For simple test in single tenant mode (where each attendee use its own instance), we're also providing the `cicd-pipeline-no-param-template.yaml` 
+It is now time to create the final CI/CD Pipeline that orchestrates everything. For that, we provide the `cicd-pipeline-template.yaml` file in repository. This OpenShift template can be registered into the `openshift` namespace so that attendees will just have to instantiate it from the catalog. This template just takes one parameter:
+* `USERNAME` that is the OpenShift/Kubernetes user of your attendee (`user01` to `user10` for instance).
+
+The Pipeline must absolutely being created into the OpenShift environment where the Jenkins instance built with Microcks plugin lays. Depending on your workshop setup, this may be into a common project - do not worry about collision, template creates job using the `${user}-beer-catalog-pipeline` expression - or into each attendee Microcks project.
+
+> For simple test in single tenant mode (where each attendee use its own instance), we're also providing the `cicd-pipeline-no-param-template.yaml`
 
 ### Execute everything
 
+Now your may run the pipeline a first time to check everything is working. On first time, pipeline only runs basic commands using the Jenkins OpenShift plugin (`openshiftBuild`, `openshiftDeploy` and `openshiftTag`). Advanced stages are commented into the pipeline definition and you may want to activate and review them step by step.
+
+The first commented block is the one about the contract testing of the API implementation using Microcks. Your may want to adjust configuration depending on the environment. Please check [Jenkins plugin documentation](http://microcks.github.io/automating/jenkins/).
+
+```java
+microcksTest(apiURL: 'http://microcks-microcks.192.168.99.100.nip.io/api',
+  serviceId: 'Beer Catalog API:0.9',
+  testEndpoint: 'http://beer-catalog-impl-beer-catalog-dev.192.168.99.100.nip.io/api/',
+  runnerType: 'POSTMAN', verbose: 'true')
+```
+
+The second commented block is the one about the deployment of API Configuration onto 3scale API Management backend. This operation is made through the execution of the `https://github.com/nmasse-itix/threescale-cicd-awx` Ansible playbook. Command parameters are described as Pipeline environment parameters that allow to specifify the Tower server, the name of inventory and the Job template to apply.
+
+```java
+ansibleTower towerServer: params.TOWER_SERVER,
+            inventory: params.ANSIBLE_TEST_INVENTORY,
+            jobTemplate: params.ANSIBLE_JOB_TEMPLATE,
+            extraVars: JsonOutput.toJson(towerExtraVars)
+```
 
 ## Stage 7: SECURE
+
+...
