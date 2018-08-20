@@ -139,5 +139,17 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "apikey": {
+      "name": "api-key",
+      "in":"header",
+      "type":"apiKey"
+    }
+  },
+  "security": [
+    {
+      "apikey": []
+    }
+  ]
 }
