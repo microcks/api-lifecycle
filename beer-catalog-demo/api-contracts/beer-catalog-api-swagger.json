@@ -142,7 +142,7 @@
   },
   "securityDefinitions": {
     "apikey": {
-      "name": "api-key",
+      "name": "user-key",
       "in":"header",
       "type":"apiKey"
     }
