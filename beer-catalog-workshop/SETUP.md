@@ -36,7 +36,7 @@ The easiest path is to install missing parts using Homebrew. If Homebrew not pre
 $ usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Then, when Homebrew is setup, just run this command to install jq (everything else should just be already there) :
+Then, when Homebrew is setup, just run this command to install `jq` (everything else should just be already there) :
 ```sh
 $ brew install jq
 ```
@@ -106,7 +106,7 @@ $ ansible-playbook -i inventory install.yml -e dockerhub_version=1.0.6 \
 
 Wait for deployment to be finished.
 
-### 4/ Configure projet and job in AWC
+### 4/ Configure project and job in AWC
 
 Login on AWX with user you just created, go to the *Projects* section and add a new project with following properties :
 * Name: `Deploy API to 3scale`
@@ -173,7 +173,7 @@ The command below should be run by a cluster administrator because it requires t
 $ oc new-app --template=microcks-persistent --param=APP_ROUTE_HOSTNAME=microcks-<project>.<app_host_url> --param=KEYCLOAK_ROUTE_HOSTNAME=keycloak-<project>.<app_host_url> --param=OPENSHIFT_MASTER=<master_url> --param=OPENSHIFT_OAUTH_CLIENT_NAME=<project>-client
 ```
 
-### 4/ Create a Jenkins Master image containing Mcirocks plugin
+### 4/ Create a Jenkins Master image containing Microcks plugin
 
 ```sh
 $ oc process -f https://raw.githubusercontent.com/microcks/microcks-jenkins-plugin/master/openshift-jenkins-master-bc.yml | oc create -f -
@@ -194,11 +194,15 @@ Wait for deployment to finish before getting on next step. When going to *Overvi
 
 ## Jenkins setup for Ansible Tower
 
-Once Jenkins instance has been setup in previous step, you finally need to configure the connection between Jenkins and Ansible Tower. To do this, go to Jenkins, click on *Manage Jenkins* > *Manage Plugins* and install the `Ansible Tower` plugin.
+Once Jenkins instance has been setup in previous step, you finally need to configure the connection between Jenkins and AWX/Ansible Tower. To do this, go to Jenkins, click on *Manage Jenkins* > *Manage Plugins* and install the `Ansible Tower` plugin. You do not need to restart Jenkins.
 
-Then click on *Credentials* > *System*, click on *Global credentials (unrestricted)* and select *Add Credentials...* . Fill-in your Tower Admin login and password, and choose `tower-admin` for the id field.
+Then click on *Credentials* > *System*, click on *Global credentials (unrestricted)* and select *Add Credentials...* to add a new user for connection to AWX/Ansible Tower. Fill-in your AWX/Tower Admin login and password, and choose `tower-admin` for the id field.
 
 ![Jenkins Ansible setup](./assets/jenkins-ansible-user.png)
+
+Finally, you also have to configure an alias to your AWX Server into Jenkins. This will allow our Jenkins pipelines to access the AWX server easily without knowing the complete server name or address. Click on *Configure System* in the management section and then go to the *Ansible Tower* section and add a new Tower Installation. Give it a name (we've simply used `tower` in our scripts), fill the URL and specify that it should be accessed using the user and credentials we have just created before.
+
+![Jenkins Ansible server setup](./assets/jenkins-ansible-server.png)
 
 
 ## OpenShift for running Workshop
