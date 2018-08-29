@@ -134,6 +134,3 @@ parameters:
 - description: The name of your 3scale tenant
   name: TENANT
   required: true
-- description: Your username (user01, user02, etc.)
-  name: USERNAME
-  required: true

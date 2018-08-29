@@ -73,7 +73,7 @@ This is the big part! It is now time to create and/or explore the other TEST and
 If you do not have already created everything in advance for your attendees, you may want to let them do everything. There are many ways of running this and we prepared a few materials for this:
 
 * There's a `deploy-envs.sh` [shell script](./deploy-envs.sh) provided in this repository that may create everything for you, both the TEST and PROD environments as well as all the `DeploymentConfig` for this environment. User should be logged into OpenShift before executing it. Depending on your Infrastructure setup, you may want to run this shell with 1 or 2 arguments:
-  * 1st argument is the `USER` within OpenShift plateform, so that everything project will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
+  * 1st argument is the `USER` within OpenShift platform, so that everything project will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
   * 2nd argument if the name of the OpenShift project the Microcks instance is deployed. This can be a generic common instance or one that is specific to your user.
 
 * There's a `env-template.yaml` [OpenShift template](./env-template.yaml) provided in this repository that you may want to load into the common `openshift` namespace and then the attendee may use 2 times to initialize both the TEST and PROD environment
@@ -90,9 +90,9 @@ Depending on what you want to demonstrate regarding 3scale API Management deploy
 * There's `apicast-simple-template.yaml` that is a simpler version of the previous one without staging environment. As we already have a TEST environment, we may sometime consider staging of API deployment on backend as a optional step.
 
 Both YAML files define a template named `beer-catalog-apicast` and can be used into TEST and PROD environment to deploy what you need. They both take the same parameters your attendees will need to provide:
-* `USERNAME` that is the OpenShift/Kubernetes user of your attendee (`user01` to `user10` for instance),
 * `TENANT` is the name of the 3scale account/tenant that is used in the 3scale hosted SaaS backend,
-* `ACCESS_TOKEN` is an aacess token to 3scale API Management backend. Please review [3scale documentation on access tokens](https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html-single/accounts/index#access_tokens).
+* `ACCESS_TOKEN` is an access token to 3scale API Management backend. Please review [3scale documentation on access tokens](https://access.redhat.com/documentation/en-us/red_hat_3scale/2-saas/html-single/accounts/index#access_tokens),
+* `USERNAME` that is the OpenShift/Kubernetes user of your attendee (`user01` to `user10` for instance). __Not used for the simple template__.
 
 > Take care applying the chosen template on both environment so that we'll be able to demonstrate the continuous deployment and promotion of API Management policies and configuration between 2 environments TEST and PROD.
 
