@@ -12,7 +12,8 @@
       "name": "MIT License",
       "url": "https://opensource.org/licenses/MIT"
     },
-    "version": "0.9"
+    "version": "0.9",
+    "basePath": "/api"
   },
   "paths": {
     "/beer/{name}": {
