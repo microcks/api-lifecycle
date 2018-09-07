@@ -6,27 +6,25 @@
 * Internet access with no blacklist filtering on `*.apicurio.io`, `*.github.com`, `*.githubusercontent.com`, `*.getpostman.com`
 * Ability to install Postman client tool on laptop
 * Ability to install OpenShift client tool (`oc`) on laptop or remote machine
-* Ability to install system utilities (`curl`, `git`, `sed`, `jq`) on laptop or remote machine
+* Ability to install system utilities (`curl`, `git`, `sed`, `ansible`) on laptop or remote machine
 * An OpenShift cluster with enough resources for instantiating ~15 pods using 3 GB RAM per attendee / group of attendees
 
 ## Utilities setup
 
 ### On Linux
-Depending on your distribution, you should be able to install `jq` through your package manager.
+Depending on your distribution, you should be able to install `ansible` through your package manager.
 
-On Ubuntu / Debian : `sudo apt-get install jq`
-On Fedora : `sudo dnf install jq`
+On Ubuntu / Debian : `sudo apt-get install ansible`
+On Fedora : `sudo dnf install ansible`
 On RHEL/CentOS :
 ```sh
 $ yum install epel-release -y
-$ yum install jq -y
+$ yum install ansible -y
 ```
 
-On other distros, as jq has no runtime dependencies, you may just use :
+On other distros you may just use :
 ```sh
-$ wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-$ chmod +x ./jq
-$ cp jq /usr/bin
+$ pip install ansible
 ```
 
 ### On Mac OS X
@@ -36,9 +34,9 @@ The easiest path is to install missing parts using Homebrew. If Homebrew not pre
 $ usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Then, when Homebrew is setup, just run this command to install `jq` (everything else should just be already there) :
+Then, when Homebrew is setup, just run this command to install `ansible` (everything else should just be already there) :
 ```sh
-$ brew install jq
+$ brew install ansible
 ```
 
 ### On both
