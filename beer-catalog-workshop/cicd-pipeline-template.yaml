@@ -76,12 +76,10 @@ objects:
             stage('Deploy to Test') {
               openshiftDeploy(deploymentConfig: 'beer-catalog-impl', namespace: '${USERNAME}-beer-catalog-test')
               // Deploy the API to 3scale
-              /*
               ansibleTower towerServer: params.TOWER_SERVER,
                           inventory: params.ANSIBLE_TEST_INVENTORY,
                           jobTemplate: params.ANSIBLE_JOB_TEMPLATE,
                           extraVars: JsonOutput.toJson(towerExtraVars)
-              */
             }
 
             stage ('Promote to Prod') {
@@ -93,12 +91,10 @@ objects:
               openshiftDeploy(deploymentConfig: 'beer-catalog-impl', namespace: '${USERNAME}-beer-catalog-prod')
               openshiftScale(deploymentConfig: 'beer-catalog-impl', namespace: '${USERNAME}-beer-catalog-prod', replicaCount: '2')
               // Deploy the API to 3scale
-              /*
               ansibleTower towerServer: params.TOWER_SERVER,
                           inventory: params.ANSIBLE_PROD_INVENTORY,
                           jobTemplate: params.ANSIBLE_JOB_TEMPLATE,
                           extraVars: JsonOutput.toJson(towerExtraVars)
-              /*
             }
           }
       type: JenkinsPipeline
