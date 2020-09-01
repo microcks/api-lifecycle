@@ -6,27 +6,25 @@
 * Internet access with no blacklist filtering on `*.apicurio.io`, `*.github.com`, `*.githubusercontent.com`, `*.getpostman.com`
 * Ability to install Postman client tool on laptop
 * Ability to install OpenShift client tool (`oc`) on laptop or remote machine
-* Ability to install system utilities (`curl`, `git`, `sed`, `jq`) on laptop or remote machine
+* Ability to install system utilities (`curl`, `git`, `sed`, `ansible`) on laptop or remote machine
 * An OpenShift cluster with enough resources for instantiating ~15 pods using 3 GB RAM per attendee / group of attendees
 
 ## Utilities setup
 
 ### On Linux
-Depending on your distribution, you should be able to install `jq` through your package manager.
+Depending on your distribution, you should be able to install `ansible` through your package manager.
 
-On Ubuntu / Debian : `sudo apt-get install jq`
-On Fedora : `sudo dnf install jq`
+On Ubuntu / Debian : `sudo apt-get install ansible`
+On Fedora : `sudo dnf install ansible`
 On RHEL/CentOS :
 ```sh
 $ yum install epel-release -y
-$ yum install jq -y
+$ yum install ansible -y
 ```
 
-On other distros, as jq has no runtime dependencies, you may just use :
+On other distros you may just use :
 ```sh
-$ wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-$ chmod +x ./jq
-$ cp jq /usr/bin
+$ pip install ansible
 ```
 
 ### On Mac OS X
@@ -36,9 +34,9 @@ The easiest path is to install missing parts using Homebrew. If Homebrew not pre
 $ usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Then, when Homebrew is setup, just run this command to install `jq` (everything else should just be already there) :
+Then, when Homebrew is setup, just run this command to install `ansible` (everything else should just be already there) :
 ```sh
-$ brew install jq
+$ brew install ansible
 ```
 
 ### On both
@@ -219,13 +217,13 @@ The command below should be run by a cluster administrator because it requires t
 * `<app_host_url>` : the Host for Routes, ex `192.168.99.100.nip.io` when using CDK or Minishift.
 
 ```sh
-$ oc new-app --template=microcks-persistent --param=APP_ROUTE_HOSTNAME=microcks-<project>.<app_host_url> --param=KEYCLOAK_ROUTE_HOSTNAME=keycloak-<project>.<app_host_url> --param=OPENSHIFT_MASTER=<master_url> --param=OPENSHIFT_OAUTH_CLIENT_NAME=<project>-client
+$ oc new-app -n microcks --template=microcks-persistent --param=APP_ROUTE_HOSTNAME=microcks-<project>.<app_host_url> --param=KEYCLOAK_ROUTE_HOSTNAME=keycloak-<project>.<app_host_url> --param=OPENSHIFT_MASTER=<master_url> --param=OPENSHIFT_OAUTH_CLIENT_NAME=<project>-client
 ```
 
 ### 4/ Create a Jenkins Master image containing Microcks plugin
 
 ```sh
-$ oc process -f https://raw.githubusercontent.com/microcks/microcks-jenkins-plugin/master/openshift-jenkins-master-bc.yml | oc create -f -
+$ oc process -f https://raw.githubusercontent.com/microcks/microcks-jenkins-plugin/master/openshift-jenkins-master-bc.yml | oc create -f - -n microcks
 ```
 
 Wait for build to finish.
@@ -233,7 +231,7 @@ Wait for build to finish.
 ### 5/ Deploy a Jenkins instance with this custom Master image
 
 ```sh
-$ oc new-app --template=jenkins-persistent --param=NAMESPACE=microcks --param=JENKINS_IMAGE_STREAM_TAG=microcks-jenkins-master:latest
+$ oc new-app -n microcks --template=jenkins-persistent --param=NAMESPACE=microcks --param=JENKINS_IMAGE_STREAM_TAG=microcks-jenkins-master:latest
 ```
 
 Wait for deployment to finish before getting on next step. When going to *Overview* of your OpenShift project, you should get the following pods running:

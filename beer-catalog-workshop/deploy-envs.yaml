@@ -1,0 +1,192 @@
+---
+
+- name: Deploy the Beer Catalog Implementation in three environments
+  hosts: localhost
+  gather_facts: false
+  vars:
+    dev_environment_default_name: beer-catalog-dev
+    test_environment_default_name: beer-catalog-test
+    prod_environment_default_name: beer-catalog-prod
+    microcks_project: microcks
+    dev_project: '{{ trainee_username ~ ''-'' ~ dev_environment_default_name if trainee_username is defined else dev_environment_default_name }}'
+    test_project: '{{ trainee_username ~ ''-'' ~ test_environment_default_name if trainee_username is defined else test_environment_default_name }}'
+    prod_project: '{{ trainee_username ~ ''-'' ~ prod_environment_default_name if trainee_username is defined else prod_environment_default_name }}'
+    project_display_name_prefix: '{{ trainee_username|upper ~ '' - '' if trainee_username is defined else '''' }}'
+  tasks:
+
+  - name: Make sure the user is logged in
+    command: oc whoami
+    changed_when: false
+
+  - name: Get a list of existing projects
+    command: oc get projects -o name
+    register: oc
+    changed_when: false
+
+  - name: Strip the 'projects/' prefix
+    set_fact:
+      existing_projects: '{{ oc.stdout_lines|map(''regex_replace'', ''^projects?/(.*)$'', ''\1'')|list }}'
+
+  - name: Make sure the DEV project exists
+    assert:
+      that:
+      - dev_project in existing_projects
+      msg: >
+        The OpenShift project '{{ dev_project }}' does not exist. So, it does not make much sense to
+        run this playbook...
+
+  - name: Create the OpenShift projects
+    command: 'oc new-project ''{{ project.name }}'' --display-name=''{{ project.display_name }}'''
+    when: project.name not in existing_projects
+    loop:
+    - name: '{{ test_project }}'
+      display_name: '{{ project_display_name_prefix }}Beer Catalog (TEST)'
+    - name: '{{ prod_project }}'
+      display_name: '{{ project_display_name_prefix }}Beer Catalog (PROD)'
+    loop_control:
+      loop_var: project
+    changed_when: false
+
+  - name: Give 'edit' privileges to Jenkins on the DEV, TEST and PROD projects
+    command: oc adm policy add-role-to-user edit system:serviceaccount:{{ microcks_project }}:jenkins -n {{ project }}
+    loop:
+    - '{{ dev_project }}'
+    - '{{ test_project }}'
+    - '{{ prod_project }}'
+    loop_control:
+      loop_var: project
+
+  - name: Give 'image-puller' privileges to the Service Accounts of the TEST and PROD project on the DEV project
+    command: oc adm policy add-role-to-group system:image-puller system:serviceaccounts:{{ project }} -n {{ dev_project }}
+    loop:
+    - '{{ test_project }}'
+    - '{{ prod_project }}'
+    loop_control:
+      loop_var: project
+
+  - name: Remove all the triggers on the DeploymentConfig in DEV
+    command: oc set triggers dc/beer-catalog-impl --remove-all -n {{ dev_project }}
+
+  - name: Add a liveness probe on the DeploymentConfig in DEV
+    command: 'oc patch dc/beer-catalog-impl -n ''{{ dev_project }}'' -p ''{{ patch|to_json }}'''
+    vars:
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: beer-catalog-impl
+                  readinessProbe:
+                    failureThreshold: 3
+                    httpGet:
+                      path: "/api/beer?page=0"
+                      port: 8080
+                      scheme: HTTP 
+                    initialDelaySeconds: 1
+                    periodSeconds: 10
+                    successThreshold: 1
+                    timeoutSeconds: 1
+    register: oc
+    failed_when: oc.rc > 0 and oc.stderr_lines|length > 0
+
+  - name: Get a list of existing DeploymentConfigs in TEST
+    command: oc get dc -o name -n {{ test_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the Beer Catalog DeploymentConfig in TEST
+    command: oc new-app --allow-missing-imagestream-tags --image-stream={{ dev_project }}/beer-catalog-impl:promoteToTest --name beer-catalog-impl -n {{ test_project }}
+    when: '''beer-catalog-impl'' not in existing_dc'
+    vars:
+      existing_dc: '{{ oc.stdout_lines|map(''regex_replace'', ''^deploymentconfigs?/(.*)$'', ''\1'')|list }}'
+    
+  - name: Get a list of existing DeploymentConfigs in PROD
+    command: oc get dc -o name -n {{ prod_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the Beer Catalog DeploymentConfig in PROD
+    command: oc new-app --allow-missing-imagestream-tags --image-stream={{ dev_project }}/beer-catalog-impl:promoteToProd --name beer-catalog-impl -n {{ prod_project }}
+    when: '''beer-catalog-impl'' not in existing_dc'
+    vars:
+      existing_dc: '{{ oc.stdout_lines|map(''regex_replace'', ''^deploymentconfigs?/(.*)$'', ''\1'')|list }}'
+
+  - name: Cancel the deployments in TEST and PROD
+    command: oc rollout cancel dc/beer-catalog-impl -n {{ project }}
+    loop:
+    - '{{ test_project }}'
+    - '{{ prod_project }}'
+    loop_control:
+      loop_var: project
+    register: oc
+    failed_when: oc.rc > 0 and 'there have been no replication controllers' not in oc.stderr
+
+  - name: Remove all the triggers on the DeploymentConfig in TEST and PROD
+    command: oc set triggers dc/beer-catalog-impl --remove-all -n {{ project }}
+    loop:
+    - '{{ test_project }}'
+    - '{{ prod_project }}'
+    loop_control:
+      loop_var: project
+
+  - name: Change the imagePullPolicy to Always in TEST and PROD
+    command: 'oc patch dc/beer-catalog-impl -n {{ project }} -p ''{{ patch|to_json }}'''
+    vars:
+      patch:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: beer-catalog-impl
+                  imagePullPolicy: Always
+    loop:
+    - '{{ test_project }}'
+    - '{{ prod_project }}'
+    loop_control:
+      loop_var: project
+    register: oc
+    failed_when: oc.rc > 0 and oc.stderr_lines|length > 0
+
+  - name: Get a list of existing Services in TEST
+    command: oc get services -o name -n {{ test_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the service in TEST
+    command: oc expose dc/beer-catalog-impl --name=beer-catalog-impl --port=8080 -n {{ test_project }}
+    when: '''beer-catalog-impl'' not in existing_services'
+    vars:
+      existing_services: '{{ oc.stdout_lines|map(''regex_replace'', ''^services?/(.*)$'', ''\1'')|list }}'
+
+  - name: Get a list of existing Routes in TEST
+    command: oc get routes -o name -n {{ test_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the route in TEST
+    command: oc expose svc/beer-catalog-impl --name=beer-catalog-impl -n {{ test_project }}
+    when: '''beer-catalog-impl'' not in existing_routes'
+    vars:
+      existing_routes: '{{ oc.stdout_lines|map(''regex_replace'', ''^routes?/(.*)$'', ''\1'')|list }}'
+
+  - name: Get a list of existing Services in PROD
+    command: oc get services -o name -n {{ prod_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the service in PROD
+    command: oc expose dc/beer-catalog-impl --name=beer-catalog-impl --port=8080 -n {{ prod_project }}
+    when: '''beer-catalog-impl'' not in existing_services'
+    vars:
+      existing_services: '{{ oc.stdout_lines|map(''regex_replace'', ''^services?/(.*)$'', ''\1'')|list }}'
+
+  - name: Get a list of existing Routes in PROD
+    command: oc get routes -o name -n {{ prod_project }}
+    register: oc
+    changed_when: false
+
+  - name: Create the route in PROD
+    command: oc expose svc/beer-catalog-impl --name=beer-catalog-impl -n {{ prod_project }}
+    when: '''beer-catalog-impl'' not in existing_routes'
+    vars:
+      existing_routes: '{{ oc.stdout_lines|map(''regex_replace'', ''^routes?/(.*)$'', ''\1'')|list }}'
