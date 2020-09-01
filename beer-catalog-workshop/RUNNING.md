@@ -60,6 +60,15 @@ Then deploy the API implementation using `Red Hat OpenJDK 8` template with this 
 * Source Repo : `https://github.com/microcks/api-lifecycle.git`
 * Source Context Dir : `/beer-catalog-demo/api-implementation`
 
+And create the route to expose your app.
+
+Or through the command line:
+
+```sh
+oc new-app --name=beer-catalog-impl redhat-openjdk18-openshift:1.2~https://github.com/microcks/api-lifecycle.git --context-dir=/beer-catalog-demo/api-implementation
+oc expose svc/beer-catalog-impl
+```
+
 Wait for some minutes for deployment. Then you can just grab the created OpenShift route for application, realize a test through Microcks *NEW TEST* feature. If using the reference implementation above, you'll have to append an `/api` suffix to the route in order to reach out implementation endpoint for API.
 
 > To put even more emphasis on the contract-first approach, it is possible to illustrate the generation of a skeleton application using contract. APIcurio as new nice feature that allows to generate a [Thorntail](https://thorntail.io/) app from the GUI. We have also run this workshop using the contract-first approach to generate a Fuse/Apache Camel application based on contracts.
@@ -72,9 +81,15 @@ This is the big part! It is now time to create and/or explore the other TEST and
 
 If you do not have already created everything in advance for your attendees, you may want to let them do everything. There are many ways of running this and we prepared a few materials for this:
 
-* There's a `deploy-envs.sh` [shell script](./deploy-envs.sh) provided in this repository that may create everything for you, both the TEST and PROD environments as well as all the `DeploymentConfig` for this environment. User should be logged into OpenShift before executing it. Depending on your Infrastructure setup, you may want to run this shell with 1 or 2 arguments:
-  * 1st argument is the `USER` within OpenShift platform, so that everything project will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
-  * 2nd argument if the name of the OpenShift project the Microcks instance is deployed. This can be a generic common instance or one that is specific to your user.
+* There's a `deploy-envs.yaml` [Ansible Playbook](./deploy-envs.yaml) provided in this repository that may create everything for you, both the TEST and PROD environments as well as all the `DeploymentConfig` for this environment. User should be logged into OpenShift before executing it. Depending on your Infrastructure setup, you may want to run this playbook with 0, 1 or 2 arguments:
+  * with zero argument, the playbook will provision the TEST and PROD environments using defaut values and global projects
+  * with `-e trainee_username=userXX`, the TEST and PROD projects will be prefixed with `${user}` as we exposed in the [Overview, variants section](./README.md),
+  * with `-e microcks_project=microcks` you can specify the name of the OpenShift project where the Microcks instance is deployed. This can be a generic common instance or one that is specific to your user.
+
+  Execute the playbook using the following command line, eventually followed by one or more arguments:
+  ```sh
+  ansible-playbook deploy-envs.yaml
+  ```
 
 * There's a `env-template.yaml` [OpenShift template](./env-template.yaml) provided in this repository that you may want to load into the common `openshift` namespace and then the attendee may use 2 times to initialize both the TEST and PROD environment
   * Remember that before being able to actually deploy stuffs, the service accounts of this projects should be allowed to pull images from DEV one. So you'll have to execute following commands to allow this:
