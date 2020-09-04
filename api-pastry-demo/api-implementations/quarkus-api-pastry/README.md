@@ -1,14 +1,29 @@
 # quarkus-api-pastry project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+This is a sample implementation of the `API Pastry 1.0.0` OpenAPI using Quarkus, the Supersonic Subatomic Java Framework. If you want to learn more about Quarkus, please visit its website: https://quarkus.io/.
 
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
 ```
 ./mvnw quarkus:dev
+```
+
+The server is running on port `8282`. You can check the API is working with following CURL requests:
+
+```sh
+$ curl localhost:8282/pastry                                                                           
+[{"name":"Tartelette Fraise","price":2.0,"size":"S","status":"available"},{"name":"Eclair Cafe","price":2.5,"size":"M","status":"available"},{"name":"Divorces","price":2.8,"size":"M","status":"available"},{"name":"Baba Rhum","price":3.2,"size":"L","status":"available"},{"name":"Millefeuille","price":4.4,"size":"L","status":"available"}]
+
+$ curl localhost:8282/pastry/Millefeuille
+{"name":"Millefeuille","price":4.4,"size":"L","status":"available"}
+
+$ # Check JAXB XML serialization
+$ curl localhost:8282/pastry/Millefeuille -H 'Accept: text/xml'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><pastry><name>Millefeuille</name><price>4.4</price><size>L</size><status>available</status></pastry>
+
+$ curl localhost:8282/pastry -H 'Accept: text/xml'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><pastries><pastry><name>Tartelette Fraise</name><price>2.0</price><size>S</size><status>available</status></pastry><pastry><name>Eclair Cafe</name><price>2.5</price><size>M</size><status>available</status></pastry><pastry><name>Divorces</name><price>2.8</price><size>M</size><status>available</status></pastry><pastry><name>Baba Rhum</name><price>3.2</price><size>L</size><status>available</status></pastry><pastry><name>Millefeuille</name><price>4.4</price><size>L</size><status>available</status></pastry></pastries>
 ```
 
 ## Packaging and running the application
