@@ -52,4 +52,8 @@ public class PastryRepository {
         }
         return null;
     }
+
+    public static void save(Pastry pastry) {
+        pastries.put(pastry.getName(), pastry);
+    }
 }

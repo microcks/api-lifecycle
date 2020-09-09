@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 public class PastryResourceTest {
 
     @Test
-    public void testGesPastriesEndpoint() {
+    public void testGetPastriesEndpoint() {
         given()
           .when().get("/pastry")
           .then()

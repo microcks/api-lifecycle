@@ -24,6 +24,7 @@ SOFTWARE.
 package io.github.microcks.samples.pastry;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -50,5 +51,28 @@ public class PastryResource {
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
     public Pastry getPastry(@PathParam("name") String name) {
         return PastryRepository.findByName(name);
+    }
+
+    @PATCH
+    @Path("/{name}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
+    public Pastry patchPastry(@PathParam("name") String name, Pastry pastry) {
+        Pastry original = PastryRepository.findByName(name);
+        if (original != null) {
+            if (pastry.geDescription() != null) {
+                original.setDescription(pastry.geDescription());
+            }
+            if (pastry.getPrice() != 0d) {
+                original.setPrice(pastry.getPrice());
+            }
+            if (pastry.getSize() != null) {
+                original.setSize(pastry.getSize());
+            }
+            if (pastry.getStatus() != null) {
+                original.setStatus(pastry.getStatus());
+            }
+            PastryRepository.save(pastry);
+        }
+        return original;
     }
 }
