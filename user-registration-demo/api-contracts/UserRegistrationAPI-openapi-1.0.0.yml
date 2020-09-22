@@ -1,0 +1,80 @@
+---
+openapi: 3.0.2
+info:
+  title: User registration API
+  version: 1.0.0
+  description: APi used for registering new users in the system
+paths:
+  /register:
+    post:
+      requestBody:
+        description: A User registration request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+            examples:
+              chuck:
+                value:
+                  fullName: Chuck Norris
+                  email: chuck@norris.com
+                  age: 23
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovedUserRegistration'
+              examples:
+                chuck:
+                  value:
+                    id: '{{ randomString(32) }}'
+                    fullName: Chuck Norris
+                    email: chuck@norris.com
+                    age: 23
+                    registrationDate: '{{ now() }}'
+          description: An approved User registration completed with id and date
+      operationId: CreateUserRegistration
+      summary: Create a new registration
+components:
+  schemas:
+    UserRegistration:
+      title: Root Type for UserRegistration
+      description: ""
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+      example:
+        fullName: Firstname Lastname
+        email: john@example.com
+        age: 42
+    ApprovedUserRegistration:
+      title: Root Type for UserRegistration
+      description: ""
+      required:
+      - id
+      - registrationDate
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        id:
+          type: string
+        registrationDate:
+          type: string
+      example:
+        id: Wen7JHPUzriJxbmw9btmFhZypjPYUM8B
+        fullName: Firstname Lastname
+        email: john@example.com
+        age: 42
+        regsitrationDate: "1600244138045"

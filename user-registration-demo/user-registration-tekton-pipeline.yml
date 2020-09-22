@@ -1,0 +1,49 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: user-registration-tekton-pipeline
+spec:
+  tasks:
+    - name: echo-hello-world-start
+      taskRef:
+        name: echo-hello-world
+    - name: microcks-test-openapi
+      taskRef:
+        name: microcks-test
+      runAfter: 
+        - echo-hello-world
+      params:
+        - name: apiNameAndVersion
+          value: "User registration API:1.0.0"
+        - name: testEndpoint
+          value: http://user-registration-user-registration.apps.cluster-7ec9.7ec9.example.opentlc.com
+        - name: runner
+          value: OPENAPI_SCHEMA
+        - name: microcksURL
+          value: https://microcks-microcks.apps.cluster-7ec9.7ec9.example.opentlc.com/api/
+        - name: waitFor
+          value: 12sec
+    - name: microcks-test-asyncapi
+      taskRef:
+        name: microcks-test
+      runAfter: 
+        - echo-hello-world
+      params:
+        - name: apiNameAndVersion
+          value: "User signed-up API:0.1.1"
+        - name: testEndpoint
+          value: kafka://my-cluster-kafka-bootstrap-user-registration.apps.cluster-7ec9.7ec9.example.opentlc.com:443/user-signed-up
+        - name: runner
+          value: ASYNCAPI_SCHEMA
+        - name: microcksURL
+          value: https://microcks-microcks.apps.cluster-7ec9.7ec9.example.opentlc.com/api/
+        - name: waitFor
+          value: 12sec
+        - name: secret
+          value: user-registration-broker
+    - name: echo-hello-world-end
+      taskRef:
+        name: echo-hello-world
+      runAfter: 
+        - microcks-test-openapi
+        - microcks-test-asyncapi

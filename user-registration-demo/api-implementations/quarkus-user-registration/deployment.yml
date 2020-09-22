@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-registration
+    app.kubernetes.io/component: user-registration
+    app.kubernetes.io/instance: user-registration
+    app.kubernetes.io/part-of: user-registration
+  name: user-registration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-registration
+  template:
+    metadata:
+      labels:
+        app: user-registration
+    spec:
+      containers:
+      - name: user-registration
+        image: quay.io/microcks/quarkus-user-registration:latest
+        imagePullPolicy: Always
+        env:
+        - name: QUARKUS_PROFILE
+          value: kube
+        resources:
+          requests:
+            cpu: 250m
+            memory: 300Mi
+          limits:
+            cpu: 500m
+            memory: 400Mi
+        ports:
+        - containerPort: 8383
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: user-registration
+  labels:
+    app: user-registration
+    app.kubernetes.io/component: user-registration
+    app.kubernetes.io/instance: user-registration
+    app.kubernetes.io/part-of: user-registration
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8383
+  selector:
+    app: user-registration
+  type: ClusterIP
+  sessionAffinity: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: user-registration
+  labels:
+    app: user-registration
+    app.kubernetes.io/component: user-registration
+    app.kubernetes.io/instance: user-registration
+    app.kubernetes.io/part-of: user-registration
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: user-registration
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  wildcardPolicy: None
