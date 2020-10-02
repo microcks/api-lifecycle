@@ -4,46 +4,62 @@ metadata:
   name: user-registration-tekton-pipeline
 spec:
   tasks:
-    - name: echo-hello-world-start
+    - name: deploy-app
       taskRef:
         name: echo-hello-world
-    - name: microcks-test-openapi
+    - name: test-asyncapi
       taskRef:
         name: microcks-test
       runAfter: 
-        - echo-hello-world
-      params:
-        - name: apiNameAndVersion
-          value: "User registration API:1.0.0"
-        - name: testEndpoint
-          value: http://user-registration-user-registration.apps.cluster-7ec9.7ec9.example.opentlc.com
-        - name: runner
-          value: OPENAPI_SCHEMA
-        - name: microcksURL
-          value: https://microcks-microcks.apps.cluster-7ec9.7ec9.example.opentlc.com/api/
-        - name: waitFor
-          value: 12sec
-    - name: microcks-test-asyncapi
-      taskRef:
-        name: microcks-test
-      runAfter: 
-        - echo-hello-world
+        - deploy-app
       params:
         - name: apiNameAndVersion
           value: "User signed-up API:0.1.1"
         - name: testEndpoint
-          value: kafka://my-cluster-kafka-bootstrap-user-registration.apps.cluster-7ec9.7ec9.example.opentlc.com:443/user-signed-up
+          value: kafka://my-cluster-kafka-bootstrap-user-registration.KUBE_APPS_URL:443/user-signed-up
         - name: runner
-          value: ASYNCAPI_SCHEMA
+          value: ASYNC_API_SCHEMA
         - name: microcksURL
-          value: https://microcks-microcks.apps.cluster-7ec9.7ec9.example.opentlc.com/api/
+          value: https://microcks-microcks.KUBE_APPS_URL/api/
         - name: waitFor
-          value: 12sec
-        - name: secret
+          value: 20sec
+        - name: secretName
           value: user-registration-broker
-    - name: echo-hello-world-end
+    - name: test-openapi-v1
+      taskRef:
+        name: microcks-test
+      runAfter: 
+        - deploy-app
+      params:
+        - name: apiNameAndVersion
+          value: "User registration API:1.0.0"
+        - name: testEndpoint
+          value: http://user-registration-user-registration.KUBE_APPS_URL
+        - name: runner
+          value: OPEN_API_SCHEMA
+        - name: microcksURL
+          value: https://microcks-microcks.KUBE_APPS_URL/api/
+        - name: waitFor
+          value: 8sec
+    - name: test-openapi-v2
+      taskRef:
+        name: microcks-test
+      runAfter: 
+        - test-openapi-v1
+      params:
+        - name: apiNameAndVersion
+          value: "User registration API:1.0.0"
+        - name: testEndpoint
+          value: http://user-registration-user-registration.KUBE_APPS_URL
+        - name: runner
+          value: OPEN_API_SCHEMA
+        - name: microcksURL
+          value: https://microcks-microcks.KUBE_APPS_URL/api/
+        - name: waitFor
+          value: 8sec
+    - name: promote-app
       taskRef:
         name: echo-hello-world
       runAfter: 
-        - microcks-test-openapi
-        - microcks-test-asyncapi
+        - test-asyncapi
+        - test-openapi-v2

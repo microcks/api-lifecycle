@@ -1,0 +1,39 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: Kafka
+metadata:
+  name: my-cluster
+spec:
+  kafka:
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      log.message.format.version: '2.5'
+    version: 2.5.0
+    storage:
+      type: ephemeral
+    replicas: 3
+    listeners:
+      plain: {}
+      tls: {}
+      external:
+        type: ingress
+        configuration:
+          bootstrap:
+            host: "my-cluster-kafka-bootstrap-user-registration.KUBE_APPS_URL"
+          brokers:
+          - broker: 0
+            host: "my-cluster-kafka-0-user-registration.KUBE_APPS_URL"
+          - broker: 1
+            host: "my-cluster-kafka-0-user-registration.KUBE_APPS_URL"
+          - broker: 3
+            host: "my-cluster-kafka-0-user-registration.KUBE_APPS_URL"
+  entityOperator:
+    topicOperator:
+      reconciliationIntervalSeconds: 90
+    userOperator:
+      reconciliationIntervalSeconds: 120
+  zookeeper:
+    storage:
+      type: ephemeral
+    replicas: 3

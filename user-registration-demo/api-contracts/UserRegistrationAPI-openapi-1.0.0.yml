@@ -30,8 +30,8 @@ paths:
                 chuck:
                   value:
                     id: '{{ randomString(32) }}'
-                    fullName: Chuck Norris
-                    email: chuck@norris.com
+                    fullName: '{{ request.body/fullName }}'
+                    email: '{{ request.body/email }}'
                     age: 23
                     registrationDate: '{{ now() }}'
           description: An approved User registration completed with id and date
