@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: quarkus-api-pastry
+    app.kubernetes.io/component: quarkus-api-pastry
+    app.kubernetes.io/instance: quarkus-api-pastry
+    app.kubernetes.io/part-of: quarkus-api-pastry
+  name: quarkus-api-pastry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quarkus-api-pastry
+  template:
+    metadata:
+      labels:
+        app: quarkus-api-pastry
+    spec:
+      containers:
+      - name: quarkus-api-pastry
+        image: quay.io/microcks/quarkus-api-pastry:latest
+        imagePullPolicy: Always
+        env:
+        - name: QUARKUS_PROFILE
+          value: kube
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 250m
+            memory: 200Mi
+        ports:
+        - containerPort: 8282
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: quarkus-api-pastry
+  labels:
+    app: quarkus-api-pastry
+    app.kubernetes.io/component: quarkus-api-pastry
+    app.kubernetes.io/instance: quarkus-api-pastry
+    app.kubernetes.io/part-of: quarkus-api-pastry
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8282
+  selector:
+    app: quarkus-api-pastry
+  type: ClusterIP
+  sessionAffinity: None
