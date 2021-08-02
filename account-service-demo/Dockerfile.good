@@ -1,0 +1,30 @@
+FROM registry.access.redhat.com/ubi8/nodejs-14-minimal:1-11
+
+ENV APP_ROOT=/app
+
+WORKDIR ${APP_ROOT}
+
+# root for build stages
+USER root
+
+# server
+COPY good-server.js ${APP_ROOT}/server/server.js
+COPY package.json ${APP_ROOT}/server/package.json
+COPY bin/ ${APP_ROOT}/server/bin/
+RUN cd ${APP_ROOT}/server \
+    && npm install --unsafe-perm \
+    && rm -rdf /opt/app-root/src/.npm /tmp/v8-compile-cache-0
+
+### Setup user for build execution and application runtime
+ENV HOME=${APP_ROOT}
+RUN chmod -R u+x ${APP_ROOT}/server/bin && \
+    chgrp -R 0 ${APP_ROOT} && \
+    chmod -R g=u ${APP_ROOT} /etc/passwd
+
+### Containers should NOT run as root as a good practice
+USER 1001
+
+# Finalize
+WORKDIR ${APP_ROOT}/server
+ENTRYPOINT [ "/app/server/bin/uid_entrypoint" ]
+EXPOSE 4000

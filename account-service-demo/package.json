@@ -1,0 +1,16 @@
+{
+  "name": "account-service-demo",
+  "version": "0.0.1",
+  "description": "account-service-demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ws": "^7.4.6"
+  },
+  "keywords": [],
+  "author": "laurent.broudoux@gmail.com",
+  "license": "MIT"
+}
