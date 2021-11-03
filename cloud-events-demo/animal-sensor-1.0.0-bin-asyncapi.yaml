@@ -1,0 +1,47 @@
+asyncapi: '2.2.0'
+info:
+  title: Animal Sensor API
+  version: 1.0.0
+  description: This service publishes events when it detect animals entering of exiting the camera frame
+channels:
+  animals/detections:
+    subscribe:
+      message:
+        $ref: '#/components/messages/AnimalMessage'
+components:
+  messages:
+    AnimalMessage:
+      contentType: application/avro
+      schemaFormat: application/vnd.apache.avro+json;version=1.9.0
+      traits:
+        - $ref: 'https://raw.githubusercontent.com/microcks/microcks-quickstarters/main/cloud/cloudevents/cloudevents-v1.0.1-asyncapi-trait.yml'
+      payload:
+        $ref: './animal-message-payload.avsc#/Animal'
+      examples:
+        - name: Zaza
+          summary: Detected pet
+          headers:
+            ce_specversion: '1.0.1'
+            ce_type: AnimalInFrameEvent
+            ce_source: /acme.com/animal-sensor/lbroudoux-garden
+            ce_id: "{{uuid()}}"
+            ce_time: "{{now(yyyy-MM-dd'T'HH:mm:SS'Z')}}"
+            content-type: application/avro
+          payload:
+            type: CAT
+            score: 0.99
+            name: Zaza
+            detectedOn: "{{now(yyyy-MM-dd'T'HH:mm:SS'Z')}}"
+        - name: Sonic
+          summary: Detected animal
+          headers:
+            ce_specversion: '1.0.1'
+            ce_type: AnimalOutFrameEvent
+            ce_source: /acme.com/animal-sensor/lbroudoux-garden
+            ce_id: "{{uuid()}}"
+            ce_time: "{{now(yyyy-MM-dd'T'HH:mm:SS'Z')}}"
+            content-type: application/avro
+          payload:
+            type: HEDGEHOG
+            score: 0.80
+            detectedOn: "{{now(yyyy-MM-dd'T'HH:mm:SS'Z')}}"

@@ -1,0 +1,9 @@
+{
+  "specversion": "1.0.1",
+  "type": "MyCoolEvent",
+  "source": "https://acme.com/cloudevents/MyCoolEventProducer",
+  "id": "fd7b9654-5bf4-4a29-8b76-4d36267bc162",
+  "time": "2021-10-30T17:31:00Z",
+  "datacontenttype": "text/xml",
+  "data": "<much wow=\"xml\"/>"
+}
