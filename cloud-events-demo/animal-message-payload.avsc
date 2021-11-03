@@ -1,0 +1,11 @@
+{
+  "namespace": "acme.avro",
+  "type": "record",
+  "name": "Animal",
+  "fields": [
+     {"name": "type", "type": "enum", "symbols": ["CAT", "HEDGEHOG", "SQUIRREL"]},
+     {"name": "score",  "type": "float"},
+     {"name": "name",  "type": ["null", "string"], "default": null},
+     {"name": "detectedOn", "type": "int"}
+  ]
+}
