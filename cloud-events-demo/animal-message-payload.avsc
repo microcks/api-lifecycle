@@ -5,7 +5,7 @@
   "fields": [
      {"name": "type", "type": "enum", "symbols": ["CAT", "HEDGEHOG", "SQUIRREL"]},
      {"name": "score",  "type": "float"},
-     {"name": "name",  "type": ["null", "string"], "default": null},
+     {"name": "name",  "type": "string"},
      {"name": "detectedOn", "type": "string"}
   ]
 }

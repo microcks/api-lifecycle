@@ -44,4 +44,5 @@ components:
           payload:
             type: HEDGEHOG
             score: 0.80
+            name: 'null'
             detectedOn: "{{now(yyyy-MM-dd'T'HH:mm:SS'Z')}}"
