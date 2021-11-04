@@ -3,7 +3,7 @@
   "type": "record",
   "name": "Animal",
   "fields": [
-     {"name": "type", "type": "enum", "symbols": ["CAT", "HEDGEHOG", "SQUIRREL"]},
+     {"name": "type", "type": {"name": "AnimalTypes", "type":"enum", "symbols": ["CAT", "HEDGEHOG", "SQUIRREL"]} },
      {"name": "score",  "type": "float"},
      {"name": "name",  "type": "string"},
      {"name": "detectedOn", "type": "string"}
