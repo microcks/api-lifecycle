@@ -6,6 +6,6 @@
      {"name": "type", "type": "enum", "symbols": ["CAT", "HEDGEHOG", "SQUIRREL"]},
      {"name": "score",  "type": "float"},
      {"name": "name",  "type": ["null", "string"], "default": null},
-     {"name": "detectedOn", "type": "int"}
+     {"name": "detectedOn", "type": "string"}
   ]
 }
