@@ -1,6 +1,6 @@
 asyncapi: '2.2.0'
 info:
-  title: Animal Sensor API
+  title: Animal Sensor Structured API
   version: 1.0.0
   description: This service publishes events when it detect animals entering of exiting the camera frame
 channels:
