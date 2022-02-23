@@ -23,16 +23,15 @@ SOFTWARE.
 */
 package io.github.microcks.samples.registration;
 
-import io.github.microcks.samples.registration.ApprovedUserRegistration;
-import io.github.microcks.samples.registration.KafkaUserRegistrationProducerManager;
-import io.github.microcks.samples.registration.UserRegistration;
-
 import org.jboss.logging.Logger;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
@@ -41,13 +40,27 @@ import javax.ws.rs.core.Response;
 /**
  * @author laurent
  */
-@Path("/register")
+@Path("/registration")
 public class RegistrationResource {
     
     private final Logger logger = Logger.getLogger(getClass());
 
+    private List<ApprovedUserRegistration> registrations = Arrays.asList(
+        new ApprovedUserRegistration(UUID.randomUUID().toString(), "Jonathan Vila", "jvilalop@redhat.com", 23),
+        new ApprovedUserRegistration(UUID.randomUUID().toString(), "Carles Arnal", "carnalp@redhat.com", 23),
+        new ApprovedUserRegistration(UUID.randomUUID().toString(), "Laurent Broudoux", "lbroudou@redhat.com", 42)
+        );
+
     @Inject
     KafkaUserRegistrationProducerManager registrationProducer;
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ApprovedUserRegistration> getRegistrations() {
+        logger.info("Fetching approved registrations");
+        return registrations;
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

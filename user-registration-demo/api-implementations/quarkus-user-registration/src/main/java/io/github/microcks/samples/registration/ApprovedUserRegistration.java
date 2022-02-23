@@ -42,6 +42,14 @@ public class ApprovedUserRegistration extends UserRegistration {
         this.registrationDate = String.valueOf(System.currentTimeMillis());
     }
 
+    public ApprovedUserRegistration(String id, String fullName, String email, int age) {
+        this.id = id;
+        this.setFullName(fullName);
+        this.setEmail(email);
+        this.setAge(age);
+        this.registrationDate = String.valueOf(System.currentTimeMillis());
+    }
+
     public String getId() {
         return id;
     }
