@@ -20,7 +20,7 @@
 								"exec": [
 									"var expectedSize = pm.globals.get(\"size\");",
 									"",
-									"pm.test(\"Valid size in response items\", function () {",
+									"pm.test(\"Valid size in response pastries\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.be.an(\"array\");",
 									"    jsonData.forEach(pastry => pm.expect(pastry.size).to.eql(expectedSize));",
@@ -57,6 +57,23 @@
 				},
 				{
 					"name": "Get pastry by name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var expectedName = pm.globals.get(\"name\");",
+									"",
+									"pm.test(\"Valid name in response pastry\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    pm.expect(pastry.name).to.eql(expectedName);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -113,6 +130,23 @@
 				},
 				{
 					"name": "Update pastry",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var expectedPrice = pm.request.json().price;",
+									"",
+									"pm.test(\"Valid price in response pastry\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    pm.expect(pastry.price).to.eql(expectedPrice);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PATCH",
 						"header": [],
