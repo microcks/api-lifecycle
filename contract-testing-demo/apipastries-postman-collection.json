@@ -65,8 +65,8 @@
 									"var expectedName = pm.globals.get(\"name\");",
 									"",
 									"pm.test(\"Valid name in response pastry\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    var pastry = pm.response.json();",
+									"    pm.expect(pastry).to.be.an(\"object\");",
 									"    pm.expect(pastry.name).to.eql(expectedName);",
 									"});"
 								],
@@ -87,7 +87,7 @@
 							"variable": [
 								{
 									"key": "name",
-									"value": null
+									"value": ""
 								}
 							]
 						}
@@ -108,7 +108,7 @@
 									"variable": [
 										{
 											"key": "name",
-											"value": "Eclair Chocolat"
+											"value": null
 										}
 									]
 								}
@@ -135,11 +135,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var expectedPrice = pm.request.json().price;",
+									"var expectedPrice = JSON.parse(pm.request.body.raw).price;",
 									"",
 									"pm.test(\"Valid price in response pastry\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    var pastry = pm.response.json();",
+									"    pm.expect(pastry).to.be.an(\"object\");",
 									"    pm.expect(pastry.price).to.eql(expectedPrice);",
 									"});"
 								],
@@ -150,6 +150,15 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http:///pastries/:name",
 							"protocol": "http",
@@ -160,7 +169,7 @@
 							"variable": [
 								{
 									"key": "name",
-									"value": null
+									"value": ""
 								}
 							]
 						}
