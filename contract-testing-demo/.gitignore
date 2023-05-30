@@ -1,0 +1,18 @@
+# NodeJS
+node_modules/
+dist/
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
