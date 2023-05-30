@@ -46,7 +46,7 @@ jobs:
       - name: Build and push container image
         if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing == 'true'
         run: |
-          cd contract-testing
+          cd contract-testing-demo
           docker buildx build --push \
             --platform=linux/amd64,linux/arm64 \
             --builder=buildx-multi-arch \
