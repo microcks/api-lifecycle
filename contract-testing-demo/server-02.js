@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
-const port = 3002
+// Set default server port to 3002
+var port = process.env.PORT || 3002;
 
 const pastries = [
   {
