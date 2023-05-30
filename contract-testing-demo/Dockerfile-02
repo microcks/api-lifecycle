@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-16-minimal:1-114
 MAINTAINER Laurent Broudoux <laurent@microcks.io>
 
 # Some version information
-LABEL io.k8s.description="API Contract Testing demo for Microcks" \
+LABEL io.k8s.description="API Contract Testing demonstration for Microcks" \
       io.k8s.display-name="API Contract Testing demo" \
       maintainer="Laurent Broudoux <laurent@microcks.io>"
 

@@ -58,13 +58,13 @@ jobs:
             --platform=linux/amd64,linux/arm64 \
             --builder=buildx-multi-arch \
             --provenance=false \
-            --build-arg TAG=01 \
-            --file Dockerfile-01 \
+            --build-arg TAG=02 \
+            --file Dockerfile-02 \
             --tag=quay.io/microcks/contract-testing-demo:02 .
           docker buildx build --push \
             --platform=linux/amd64,linux/arm64 \
             --builder=buildx-multi-arch \
             --provenance=false \
-            --build-arg TAG=01 \
-            --file Dockerfile-01 \
+            --build-arg TAG=03 \
+            --file Dockerfile-03 \
             --tag=quay.io/microcks/contract-testing-demo:03 .
