@@ -10,6 +10,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+/**
+ * PastryAPIClient is responsible for requesting the product/stock management system (aka the Pastry registry)
+ * using its REST API. It should take care of serializing entities and Http params as required by the 3rd party API.
+ * @author laurent
+ */
 @Component
 public class PastryAPIClient {
 
