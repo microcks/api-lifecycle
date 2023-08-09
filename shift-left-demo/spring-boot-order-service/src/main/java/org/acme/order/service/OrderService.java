@@ -33,7 +33,7 @@ public class OrderService {
     * @throws Exception
     */
    public Order placeOrder(OrderInfo info) throws UnavailablePastryException, Exception {
-      // For all products in order, check the avaibility calling the Pastry API.
+      // For all products in order, check the availability calling the Pastry API.
       Map<CompletableFuture<Boolean>, String> availabilityFutures = new HashMap<>();
       for (ProductQuantity productQuantity : info.productQuantities()) {
          availabilityFutures.put(checkPastryAvailability(productQuantity.productName()), productQuantity.productName());

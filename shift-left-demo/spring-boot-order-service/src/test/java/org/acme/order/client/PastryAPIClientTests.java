@@ -62,5 +62,9 @@ public class PastryAPIClientTests {
       pastry = client.getPastry("Eclair Cafe");
       assertEquals("Eclair Cafe", pastry.name());
       assertEquals("available", pastry.status());
+
+      pastry = client.getPastry("Eclair Chocolat");
+      assertEquals("Eclair Chocolat", pastry.name());
+      assertEquals("unknown", pastry.status());
    }
 }
