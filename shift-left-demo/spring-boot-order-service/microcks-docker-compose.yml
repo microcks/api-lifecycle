@@ -5,11 +5,12 @@ services:
     restart: on-failure
     image: quay.io/microcks/microcks-cli:latest
     volumes:
-      - "./src/test/resources/third-parties:/resources"
+      - "./src/main/resources:/resources"
+      - "./src/test/resources/third-parties:/third-parties"
     entrypoint:
       - microcks-cli
       - import
-      - '/resources/apipastries-openapi.yaml:true,/resources/apipastries-postman-collection.json:false'
+      - '/resources/order-service-openapi.yaml:true,/third-parties/apipastries-openapi.yaml:true,/third-parties/apipastries-postman-collection.json:false'
       - --microcksURL=http://microcks:8080/api
       - --insecure
       - --keycloakClientId=foo
