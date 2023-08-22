@@ -17,17 +17,17 @@ The `Order Service` application has been designed around 3 main components that 
 
 ![Order Service architecture](./assets/order-service-architecture.png)
 
-Of course, this is a very naïve vision of a real-life system as such an application would certainly pull out much more
+Of course, this is a very naive vision of a real-life system as such an application would certainly pull out much more
 dependencies (like a `Payment Service`, a `Customer Service`, a `Shipping Service`, and much more) and offer more complex API.
 However, this situation is complex enough to highlight the two problems we're addressing:
-* How to **efficiently set up a development environment** that depends on third-party API like the Pastry API? 
+1) How to **efficiently set up a development environment** that depends on third-party API like the Pastry API? 
 You certainly want to avoid cloning this component repository, figuring out how to launch it and configure it accordingly. As a developer, developing your own mock of this service makes you also lose time and risk drifting from initial intent,
-* How to **efficiently validate the conformance** of the `Order API` against business expectations and OpenAPI contract? 
+2) How to **efficiently validate the conformance** of the `Order API` against business expectations and OpenAPI contract? 
 Besides the core business logic, you might want to validate the network and protocol serialization layers as well as the respect of HTTP semantics.
 
 ## Development phase
 
-Let's imgine you start an interecative development/testing session, running your local server with:
+Let's imagine you start an interactive development/testing session, running your local server with:
 
 ```shell
 $ mvn spring-boot:run
@@ -124,9 +124,11 @@ $ curl -XPOST localhost:8080/api/orders -H 'Content-type: application/json' \
 
 ## Unit Test phase
 
-In addition of being launched in interactive mode, Microcks can also be launched automatically within your unit tests using [Testcontainers](https://testcontainers.com/).
+In addition, Microcks can also be launched automatically within your unit tests using [Testcontainers](https://testcontainers.com/).
 Microcks provides a [`microcks-testcontainers-java`](https://github.com/microcks/microcks-testcontainers-java) module you can integrate in JUnit 4 or JUnit 5 tests.
 Check the `pom.xml` of this project to see how to declare dependencies.
+
+For a quick run, just launch `./mvnw test` command in a terminal to see the Microcks Testcontainer in action.
 
 Below, we're using this module to test our `PastryAPIClient` to ensure all network and protocol serialization stuff are working as expected.
 
@@ -149,6 +151,10 @@ public static void setup() throws Exception {
 }
 ```
 
+Once the Microcks container is started, we then need to update the `pastries.baseUrl` application property that is used by the
+`PastryAPIClient` component to know the endpoint of this external API. Here, we have to replace the one defined in the file by
+a new URL directly provided by the Microcks container:
+
 ```java
 @DynamicPropertySource
 static void configureProperties(DynamicPropertyRegistry registry) {
@@ -157,24 +163,56 @@ static void configureProperties(DynamicPropertyRegistry registry) {
 }
 ```
 
+Finally, we can define our unit test method that allow checking that the `PastryAPIClient` (here via the `client` reference)
+is working as expected:
+
 ```java
 @Test
 public void testGetPastries(){
    // Test our API client and check that arguments and responses are correctly serialized.
-   List<Pastry> pastries=client.listPastries("S");
+   List<Pastry> pastries = client.listPastries("S");
    assertEquals(1,pastries.size());
 }
 ```
 
-In the case you're using JUnit 4, the things are very similar and available in the `PastryAPIClientJUnit4Tests.java` file.
+In the case you're using JUnit 4, things are very similar and available in the `PastryAPIClientJUnit4Tests.java` file.
 
 ### OpenAPI contract testing
+
+Remember the 2 problems we're trying to solve here? The 2nd one is about how to validate the conformance of the `Order API` we'll
+expose to consumers. We certainly can write an integration test that uses [Rest Assured](https://rest-assured.io/) or other libraries
+to invoke the exposed Http layer and validate each and every response with Java assertions like:
+
+```java
+when()
+   .get("/lotto/{id}", 5)
+.then()
+   .statusCode(200)
+   .body("lotto.lottoId", equalTo(5),
+      "lotto.winners.winnerId", hasItems(23, 54));
+```
+
+This certainly works but presents 2 problems in my humble opinion:
+* It's a lot of code to write! And it's apply to each API interaction because for each interaction it's probably a good idea to
+check the structure of same objects in the message. This lead to a fair amount of code!
+* The code you write here is actually a language specific translation of the OpenAPI specification for the `Order API`: so the same
+"rules" get duplicated. Whether you edit the code or the OpenAPI spec first, high are the chances you get some drifts between your test 
+suite and the specification you will provide to consumers!
+
+Microcks Testcontainer integration provides another approach by letting you reuse the OpenAPI specification directly in your test suite,
+without having to write assertions and validation of messages for API interaction.
+
+In the case you're using JUnit 5, you'll have first to declare a `MicrocksContainer` as a static `@Container` like below.
+The little difference here is that this container must have access to the host you're running your unit/integration test on: 
 
 ```java
 @Container
 public static MicrocksContainer microcksContainer = new MicrocksContainer("quay.io/microcks/microcks-uber:nightly")
       .withAccessToHost(true);
 ```
+
+Then, you can add a `@BeforeAll` method for importing the artifacts you'll need. Here you'll need those to mock the `Pastry API` dependency
+but also the `Order Service` OpenAPI specification so that Microcks know your test suite "rules":
 
 ```java
 @BeforeAll
@@ -187,10 +225,17 @@ public static void setup() throws Exception {
 }
 ```
 
+Your test execution will need to know the local port the Spring Boot runtime is running on. This is done with declaration of a
+`@LocalServerPort` annotated member in Spring Boot:
+
 ```java
 @LocalServerPort
 private Integer port;
 ```
+
+This port should then be used to ask `Testcontainers` to expose this port for running Microcks container. This can be done `@BeforeEach`
+test. Like in mocking case, we  need to update the `pastries.baseUrl` application property with the value provided by the Microcks container
+for the `Pastry API` dependency:
 
 ```java
 @BeforeEach
@@ -206,6 +251,11 @@ static void configureProperties(DynamicPropertyRegistry registry) {
 }
 ```
 
+Finally, we can define our unit test method that allow checking that the `OrderController` (here via the `testEndpoint()` value)
+is conformant with the OpenAPI specification for `Order Service`, version `0.1.0`. The nice thing is that it's just one call for validating
+all the interactions with the API. That method is also super easy to enrich in the future: when the next `0.2.0` version of the API will
+be under-development, you'll be able to check the conformance with both `0.1.0` and `0.2.0` as per the semantic versioning requirements.
+
 ```java
 @Test
 public void testOpenAPIContract() throws Exception {
@@ -220,6 +270,13 @@ public void testOpenAPIContract() throws Exception {
   assertTrue(testResult.isSuccess());
 ```
 
+> Note we're using the special `host.testcontainers.internal` hostname that is your running host hostname that can be reached out
+from the Microcks container. Remember that it's this container that is actually calling the `OrderController` API.
+
+In the case you're using JUnit 4, things are very similar and available in the `OrderControllerContractJUnit4Tests.java` file.
+
+For more information on the `TestResult` class and the available properties, please check the [`microcks-testcontainers-java`](https://github.com/microcks/microcks-testcontainers-java)
+documentation.
 
 ### Reference Documentation
 
