@@ -9,7 +9,7 @@ public class Order {
    private OrderStatus status;
    private String customerId;
    private List<ProductQuantity> productQuantities;
-   private double totalPrice;
+   private Double totalPrice;
 
 
    public Order() {
@@ -49,11 +49,11 @@ public class Order {
       this.productQuantities = productQuantities;
    }
 
-   public double getTotalPrice() {
+   public Double getTotalPrice() {
       return totalPrice;
    }
 
-   public void setTotalPrice(double expectedPrice) {
+   public void setTotalPrice(Double expectedPrice) {
       this.totalPrice = expectedPrice;
    }
 }
