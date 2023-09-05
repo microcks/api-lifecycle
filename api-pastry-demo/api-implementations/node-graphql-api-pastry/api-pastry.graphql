@@ -1,0 +1,33 @@
+# microcksId: Pastry Graph API : 1.0
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+type Pastry {
+    name: String!
+    description: String!
+    size: String!
+    price: Float!
+    status: String!
+    rating: Float!
+    reviews: Int
+}
+type Pastries {
+    count: Int!
+    pastries: [Pastry]
+}
+input Review {
+    comment: String
+    rating: Int
+}
+
+type Query {
+    allPastries: Pastries
+    pastry(name: String): Pastry
+    pastries(size: String): Pastries
+}
+
+type Mutation {
+    addReview(pastryName: String, review: Review): Pastry
+}

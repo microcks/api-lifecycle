@@ -1,0 +1,12 @@
+{
+  "name": "node-graphql-api-pastry",
+  "version": "0.0.1",
+  "description": "Sample GraphQL API Pastry",
+  "author": "laurent.broudoux@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.8.0"
+  }
+}

@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "3bed6990-dd80-4009-9743-880bd8a4d806",
+		"name": "Pastry Graph API",
+		"description": "version=1.0 - A Graph API for querying pastries",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1278651"
+	},
+	"item": [
+		{
+			"name": "queries",
+			"item": [
+				{
+					"name": "pastry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query pastry ($name: String) {\n    pastry (name: $name) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+								"variables": "{\n  \"name\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "http://pastry",
+							"protocol": "http",
+							"host": [
+								"pastry"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Millefeuille",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query pastry ($name: String) {\n    pastry (name: $name) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+										"variables": "{\n  \"name\": \"Millefeuille\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"pastry\": {\n            \"name\": \"Millefeuille\",\n            \"description\": \"Delicieux Millefeuille pas calorique du tout\",\n            \"size\": \"L\",\n            \"price\": 4.4,\n            \"status\": \"available\",\n            \"rating\": 4.5,\n            \"reviews\": 253\n        }\n    }\n}"
+						},
+						{
+							"name": "Eclair Chocolat",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query pastry ($name: String) {\n    pastry (name: $name) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+										"variables": "{\n  \"name\": \"Eclair Chocolat\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"pastry\": {\n            \"name\": \"Eclair Chocolat\",\n            \"description\": \"Delicieux Eclair au Chocolat pas calorique du tout\",\n            \"size\": \"M\",\n            \"price\": 2.4,\n            \"status\": \"unknown\",\n            \"rating\": 4.4,\n            \"reviews\": 302\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "pastries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query pastries ($size: String) {\n    pastries (size: $size) {\n        count\n    }\n}",
+								"variables": "{\n  \"size\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "http://pastries",
+							"protocol": "http",
+							"host": [
+								"pastries"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "pastries_m",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query pastries ($size: String) {\n    pastries (size: $size) {\n        count\n        pastries {\n            name\n            description\n            size\n            price\n            status\n            rating\n            reviews\n        }\n    }\n}",
+										"variables": "{\n  \"size\": \"M\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"pastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Eclair Cafe\",\n                    \"description\": \"Delicieux Eclair au Cafe pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.5,\n                    \"status\": \"available\",\n                    \"rating\": 4.2,\n                    \"reviews\": 405\n                },\n                {\n                    \"name\": \"Eclair Chocolat\",\n                    \"description\": \"Delicieux Eclair au Chocolat pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.4,\n                    \"status\": \"unknown\",\n                    \"rating\": 4.4,\n                    \"reviews\": 302\n                },\n                {\n                    \"name\": \"Divorces\",\n                    \"description\": \"Delicieux Divorces pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.8,\n                    \"status\": \"available\",\n                    \"rating\": 3.2,\n                    \"reviews\": 36\n                }\n            ],\n            \"count\": 3\n        }\n    }\n}"
+						},
+						{
+							"name": "pastries_s",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query pastries ($size: String) {\n    pastries (size: $size) {\n        count\n        pastries {\n            name\n            description\n            size\n            price\n            status\n            rating\n            reviews\n        }\n    }\n}",
+										"variables": "{\n  \"size\": \"S\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"pastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Tartelette Fraise\",\n                    \"description\": \"Delicieuse Tartelette aux Fraises fraiches\",\n                    \"size\": \"S\",\n                    \"price\": 2,\n                    \"status\": \"available\",\n                    \"rating\": 3.5,\n                    \"reviews\": 57\n                }\n            ],\n            \"count\": 1\n        }\n    }\n}"
+						},
+						{
+							"name": "pastries_l",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query pastries ($size: String) {\n    pastries (size: $size) {\n        count\n        pastries {\n            name\n            description\n            size\n            price\n            status\n            rating\n            reviews\n        }\n    }\n}",
+										"variables": "{\n  \"size\": \"L\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"pastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Baba Rhum\",\n                    \"description\": \"Delicieux Baba au Rhum pas calorique du tout\",\n                    \"size\": \"L\",\n                    \"price\": 3.2,\n                    \"status\": \"available\",\n                    \"rating\": 3.1,\n                    \"reviews\": 185\n                },\n                {\n                    \"name\": \"Millefeuille\",\n                    \"description\": \"Delicieux Millefeuille pas calorique du tout\",\n                    \"size\": \"L\",\n                    \"price\": 4.4,\n                    \"status\": \"available\",\n                    \"rating\": 4.5,\n                    \"reviews\": 253\n                }\n            ],\n            \"count\": 1\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "allPastries",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query allPastries {\n    allPastries {\n        count\n        pastries\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "http://allPastries",
+							"protocol": "http",
+							"host": [
+								"allPastries"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "allPastries",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query allPastries {\n    allPastries {\n        count\n        pastries {\n            name\n            description\n            size\n            price\n            status\n            rating\n            reviews\n        }\n    }\n}",
+										"variables": "{}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"allPastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Baba Rhum\",\n                    \"description\": \"Delicieux Baba au Rhum pas calorique du tout\",\n                    \"size\": \"L\",\n                    \"price\": 3.2,\n                    \"status\": \"available\",\n                    \"rating\": 3.1,\n                    \"reviews\": 185\n                },\n                {\n                    \"name\": \"Divorces\",\n                    \"description\": \"Delicieux Divorces pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.8,\n                    \"status\": \"available\",\n                    \"rating\": 3.2,\n                    \"reviews\": 36\n                },\n                {\n                    \"name\": \"Tartelette Fraise\",\n                    \"description\": \"Delicieuse Tartelette aux Fraises fraiches\",\n                    \"size\": \"S\",\n                    \"price\": 2,\n                    \"status\": \"available\",\n                    \"rating\": 3.5,\n                    \"reviews\": 57\n                },\n                {\n                    \"name\": \"Eclair Cafe\",\n                    \"description\": \"Delicieux Eclair au Cafe pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.5,\n                    \"status\": \"available\",\n                    \"rating\": 4.2,\n                    \"reviews\": 405\n                },\n                {\n                    \"name\": \"Eclair Chocolat\",\n                    \"description\": \"Delicieux Eclair au Chocolat pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.4,\n                    \"status\": \"unknown\",\n                    \"rating\": 4.4,\n                    \"reviews\": 302\n                },\n                {\n                    \"name\": \"Millefeuille\",\n                    \"description\": \"Delicieux Millefeuille pas calorique du tout\",\n                    \"size\": \"L\",\n                    \"price\": 4.4,\n                    \"status\": \"available\",\n                    \"rating\": 4.5,\n                    \"reviews\": 253\n                }\n            ],\n            \"count\": 6\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "mutations",
+			"item": [
+				{
+					"name": "addReview",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addReview ($pastryName: String, $review: Review) {\n    addReview (pastryName: $pastryName, review: $review) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+								"variables": "{\n  \"pastryName\": \"\",\n  \"review\": {\n    \"comment\": \"\",\n    \"rating\": 0\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "http://addReview",
+							"protocol": "http",
+							"host": [
+								"addReview"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Awesome Baba Rhum",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation addReview ($pastryName: String, $review: Review) {\n    addReview (pastryName: $pastryName, review: $review) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+										"variables": "{\n  \"pastryName\": \"Baba Rhum\",\n  \"review\": {\n    \"comment\": \"Awesome\",\n    \"rating\": 5\n  }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"data\": {\n    \"addReview\": {\n        \"name\": \"Baba Rhum\",\n        \"description\": \"Delicieux Baba au Rhum pas calorique du tout\",\n        \"size\": \"L\",\n        \"price\": 3.2,\n        \"status\": \"available\",\n        \"rating\": 3.1,\n        \"reviews\": 186\n    }\n  }\n}"
+						},
+						{
+							"name": "Delicious Tartelette",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation addReview ($pastryName: String, $review: Review) {\n    addReview (pastryName: $pastryName, review: $review) {\n        name\n        description\n        size\n        price\n        status\n        rating\n        reviews\n    }\n}",
+										"variables": "{\n  \"pastryName\": \"Tartelette Fraise\",\n  \"review\": {\n    \"comment\": \"Delicious\",\n    \"rating\": 5\n  }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"data\": {\n    \"addReview\": {\n        \"name\": \"Tartelette Fraise\",\n        \"description\": \"Delicieuse Tartelette aux Fraises fraiches\",\n        \"size\": \"S\",\n        \"price\": 2,\n        \"status\": \"available\",\n        \"rating\": 3.6,\n        \"reviews\": 58\n    }\n  }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "",
+			"type": "any"
+		}
+	]
+}

@@ -1,0 +1,22 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIMetadata
+metadata:
+  name: Pastry Graph API
+  version: 1.0
+  labels:
+    domain: pastries
+    status: stable
+    team: Team A
+operations:
+  'addReview':
+    dispatcher: JSON_BODY
+    dispatcherRules: |-
+      {
+        "exp": "/pastryName",
+        "operator": "equals",
+        "cases": {
+          "Baba Rhum": "Awesome Baba Rhum",
+          "Tartelette Fraise": "Delicious Tartelette Fraise",
+          "default": "Awesome Baba Rhum"
+        }
+      }
