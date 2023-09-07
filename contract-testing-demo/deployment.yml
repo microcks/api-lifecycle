@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pastries-api
+    app.kubernetes.io/component: pastries-api
+    app.kubernetes.io/instance: pastries-api
+    app.kubernetes.io/part-of: pastries-api
+  name: pastries-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pastries-api
+  template:
+    metadata:
+      labels:
+        app: pastries-api
+    spec:
+      containers:
+      - name: pastries-api
+        image: quay.io/microcks/contract-testing-demo:03
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3003
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pastries-api
+  labels:
+    app: pastries-api
+    app.kubernetes.io/component: pastries-api
+    app.kubernetes.io/instance: pastries-api
+    app.kubernetes.io/part-of: pastries-api
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 3003
+  selector:
+    app: pastries-api
+  type: ClusterIP
+  sessionAffinity: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: pastries-api
+  labels:
+    app: pastries-api
+    app.kubernetes.io/component: pastries-api
+    app.kubernetes.io/instance: pastries-api
+    app.kubernetes.io/part-of: pastries-api
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: pastries-api
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  wildcardPolicy: None
