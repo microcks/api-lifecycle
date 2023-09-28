@@ -20,7 +20,7 @@ public class OrderResourceContractTests {
    @ConfigProperty(name= "quarkus.http.test-port")
    int quarkusHttpPort;
 
-   @ConfigProperty(name= "quarkus.microcks.default")
+   @ConfigProperty(name= "quarkus.microcks.default.http")
    String microcksContainerUrl;
 
    @Inject

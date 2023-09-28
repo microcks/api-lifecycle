@@ -144,7 +144,7 @@ In order to interact with the Microcks container, you'll need to access its URL 
 to retrieve the global Jackson ObjectMapper if you want/need to introspect the data exchanged during the conformance tests:
 
 ```java
-@ConfigProperty(name= "quarkus.microcks.default")
+@ConfigProperty(name= "quarkus.microcks.default.http")
 String microcksContainerUrl;
 
 @Inject
