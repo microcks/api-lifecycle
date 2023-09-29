@@ -14,7 +14,7 @@ You must install the `Strimzi` or `Red Hat AMQ Streams` operator as well as the 
 Start creating the Kafka broker:
 
 ```sh
-oc create -f kafka-broker-openshift.yml -n user-registration
+oc create -f kafka-broker-openshift-beta2.yml -n user-registration
 ```
 
 After the broker has been provisionned, you should retrieve and extract the certificate for client connections:
