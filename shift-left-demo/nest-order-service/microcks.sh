@@ -1,0 +1,1 @@
+docker compose -f microcks-docker-compose.yml up
