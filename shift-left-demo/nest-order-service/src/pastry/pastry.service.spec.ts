@@ -14,7 +14,7 @@ describe('PastryService', () => {
   let container: StartedMicrocksContainer;
   let service: PastryService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     // Start container and load artifacts.
     container = await new MicrocksContainer()
       .withMainArtifacts([path.resolve(resourcesDir, 'apipastries-openapi.yml')])
@@ -33,7 +33,7 @@ describe('PastryService', () => {
     service = module.get<PastryService>(PastryService);
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     // Now stop the container.
     await container.stop();
   });

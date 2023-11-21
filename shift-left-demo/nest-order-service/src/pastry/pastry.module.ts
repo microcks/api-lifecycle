@@ -6,7 +6,7 @@ import { PastryService } from './pastry.service';
 @Module({
   imports: [ConfigModule.forRoot({
     load: [() => ({
-      'pastries.baseurl': 'http://localhost:4000/api'
+      'pastries.baseurl': 'http://localhost:9090/rest/API+Pastries/0.0.1'
     })],
   })],
   providers: [PastryService],

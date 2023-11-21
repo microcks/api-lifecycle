@@ -17,7 +17,7 @@ describe('OrderController (e2e)', () => {
     let app: INestApplication;
     let appPort: number;
   
-    beforeEach(async () => {
+    beforeAll(async () => {
       appPort = (await findFreePorts(1, {startPort: 3000, endPort: 3100}))[0];
       await TestContainers.exposeHostPorts(appPort);
 
@@ -43,7 +43,7 @@ describe('OrderController (e2e)', () => {
       await app.listen(appPort);
     });
 
-    afterEach(async () => {
+    afterAll(async () => {
       // Now stop the container and the network.
       await container.stop();
       await app.close();
