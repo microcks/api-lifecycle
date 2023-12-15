@@ -1,0 +1,74 @@
+asyncapi: '2.6.0'
+id: 'urn:io.microcks.example.pastry-orders'
+info:
+  title: Pastry orders API
+  version: 0.1.0
+  description: Sample AsyncAPI for Pastry order events
+defaultContentType: application/json
+channels:
+  pastry/orders:
+    description: The topic on which pastry orders events may be consumed
+    subscribe:
+      summary: Receive informations about pastry orders
+      operationId: receivedPastryOrder
+      message:
+        $ref: '#/components/messages/PastryOrder'
+    bindings:
+      ws:
+        method: POST
+components:
+  messages:
+    PastryOrder:
+      payload:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - customerId
+          - status
+          - productQuantities
+        properties:
+          id:
+            description: Unique identifier of order (guid)
+            type: string
+          customerId:
+            description: Identifier of customer of this order (guid)
+            type: string
+          status:
+            description: Status of Order
+            enum:
+              - CREATED
+              - VALIDATED
+              - CANCELED
+              - FAILED
+            type: string
+          productQuantities:
+            description: Desired products and quantities for this order
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductQuantity'
+      examples:
+        - Validated order:
+            payload:
+              id: 4dab240d-7847-4e25-8ef3-1530687650c8
+              customerId: fe1088b3-9f30-4dc1-a93d-7b74f0a072b9
+              status: VALIDATED
+              productQuantities:
+                - quantity: 2
+                  pastryName: Croissant
+                - quantity: 1
+                  pastryName: Millefeuille
+  schemas:
+    ProductQuantity:
+      type: object
+      additionalProperties: false
+      required:
+        - quantity
+        - pastryName
+      properties:
+        quantity:
+          description: Desired quantity
+          type: integer
+        pastryName:
+          description: Desired pastry name
+          type: string

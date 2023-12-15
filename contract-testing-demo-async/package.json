@@ -1,0 +1,18 @@
+{
+  "name": "contract-testing-demo-async",
+  "version": "0.0.1",
+  "description": "Demonstrate contract-testing on Async API",
+  "main": "server-1.js",
+  "scripts": {
+    "start": "node server-01.js"
+  },
+  "keywords": [
+    "api",
+    "contract-test"
+  ],
+  "author": "laurent.broudoux@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^7.4.6"
+  }
+}
