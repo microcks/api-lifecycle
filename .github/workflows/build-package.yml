@@ -101,7 +101,7 @@ jobs:
           docker buildx inspect $BUILDER || docker buildx create --name=$BUILDER --driver=docker-container --driver-opt=network=host
 
       - name: Build and push container image
-        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing == 'true'
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing-async == 'true'
         run: |
           cd contract-testing-demo-async
           docker buildx build --push \

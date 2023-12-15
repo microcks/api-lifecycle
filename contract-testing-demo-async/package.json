@@ -1,7 +1,7 @@
 {
   "name": "contract-testing-demo-async",
   "version": "0.0.1",
-  "description": "Demonstrate contract-testing on Async API",
+  "description": "Demonstrate contract-testing on Async API with WebSocket",
   "main": "server-1.js",
   "scripts": {
     "start": "node server-01.js"
