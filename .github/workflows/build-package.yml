@@ -12,7 +12,7 @@ on:
       - 'LICENSE'
       - 'README*'
 jobs:
-  build-package:
+  build-package-contract-testing:
     runs-on: ubuntu-latest
     environment: Build
     steps:
@@ -68,3 +68,53 @@ jobs:
             --build-arg TAG=03 \
             --file Dockerfile-03 \
             --tag=quay.io/microcks/contract-testing-demo:03 .
+
+  build-package-contract-testing-async:
+    runs-on: ubuntu-latest
+    environment: Build
+    steps:
+      # Checkout repository content
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Filter contract-testing-async
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            contract-testing-async:
+              - 'contract-testing-demo-async/**'
+
+      - name: Set up QEMU
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing-async == 'true'
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing-async == 'true'
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to Quay.io Registry and setup multi-arch builder
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing-async == 'true'
+        run: |
+          echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_USERNAME }} --password-stdin quay.io
+          BUILDER=buildx-multi-arch
+          docker buildx inspect $BUILDER || docker buildx create --name=$BUILDER --driver=docker-container --driver-opt=network=host
+
+      - name: Build and push container image
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.contract-testing == 'true'
+        run: |
+          cd contract-testing-demo-async
+          docker buildx build --push \
+            --platform=linux/amd64,linux/arm64 \
+            --builder=buildx-multi-arch \
+            --provenance=false \
+            --build-arg TAG=01 \
+            --file Dockerfile-01 \
+            --tag=quay.io/microcks/contract-testing-demo-async:01 .
+          docker buildx build --push \
+            --platform=linux/amd64,linux/arm64 \
+            --builder=buildx-multi-arch \
+            --provenance=false \
+            --build-arg TAG=02 \
+            --file Dockerfile-02 \
+            --tag=quay.io/microcks/contract-testing-demo-async:02 .
