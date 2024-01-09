@@ -1,0 +1,10 @@
+FROM quay.io/microcks/microcks:nightly
+
+MAINTAINER Laurent Broudoux <laurent@microcks.io>
+
+# Copy libraries jar files
+COPY lib /deployments/lib
+
+ENV JAVA_OPTIONS=-Dloader.path=/deployments/lib
+ENV JAVA_MAIN_CLASS=org.springframework.boot.loader.PropertiesLauncher
+ENV JAVA_APP_JAR=app.jar

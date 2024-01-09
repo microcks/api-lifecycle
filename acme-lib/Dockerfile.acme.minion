@@ -1,0 +1,8 @@
+FROM quay.io/microcks/microcks-async-minion:nightly
+
+MAINTAINER Laurent Broudoux <laurent@microcks.io>
+
+# Copy libraries jar files
+COPY lib /deployments/lib
+
+ENV JAVA_CLASSPATH=/deployments/*:/deployments/lib/*

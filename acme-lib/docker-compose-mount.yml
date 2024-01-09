@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  mongo:
+    image: mongo:3.6.23
+    container_name: microcks-db
+    volumes:
+      - "~/tmp/microcks-data:/data/db"
+
+  app:
+    depends_on:
+      - mongo
+    image: quay.io/microcks/microcks:nightly
+    container_name: microcks
+    volumes:
+      - ./lib:/deployments/lib
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017
+      - SPRING_DATA_MONGODB_DATABASE=microcks
+      - POSTMAN_RUNNER_URL=http://postman:3000
+      - TEST_CALLBACK_URL=http://microcks:8080
+      - SERVICES_UPDATE_INTERVAL=0 0 0/2 * * *
+      - KEYCLOAK_ENABLED=false
+      - JAVA_OPTIONS=-Dloader.path=/deployments/lib
+      - JAVA_MAIN_CLASS=org.springframework.boot.loader.PropertiesLauncher
+      - JAVA_APP_JAR=app.jar
+      #- MAX_UPLOAD_FILE_SIZE=3MB
+
+
+    
+
