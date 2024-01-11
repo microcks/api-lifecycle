@@ -19,7 +19,7 @@ describe('OrderController (e2e)', () => {
     let appPort: number;
   
     beforeAll(async () => {
-      appPort = (await findFreePorts(1, {startPort: 3000, endPort: 3100}))[0];
+      appPort = (await findFreePorts(1, {startPort: 3100, endPort: 3200}))[0];
       await TestContainers.exposeHostPorts(appPort);
 
       // Start ensemble and load artifacts.
@@ -33,6 +33,7 @@ describe('OrderController (e2e)', () => {
           path.resolve(resourcesDir, 'order-service-postman-collection.json'),
           path.resolve(resourcesDir, 'apipastries-postman-collection.json')
         ])
+        .withPostman()
         .start();
 
       const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -65,7 +66,7 @@ describe('OrderController (e2e)', () => {
 
       var testResult = await ensemble.getMicrocksContainer().testEndpoint(testRequest);
 
-      console.log(JSON.stringify(testResult));
+      console.log(JSON.stringify(testResult, null, 2));
 
       expect(testResult.success).toBe(true);
       expect(testResult.testCaseResults.length).toBe(1);

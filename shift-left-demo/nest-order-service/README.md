@@ -335,6 +335,7 @@ beforeAll(async () => {
       path.resolve(resourcesDir, 'order-service-postman-collection.json'),
       path.resolve(resourcesDir, 'apipastries-postman-collection.json')
     ])
+    .withPostman()
     .start();
 
   [...]
@@ -399,5 +400,3 @@ Snapshots:   0 total
 Time:        9.357 s, estimated 11 s
 Ran all test suites within paths "test/orders.api.postman.e2e-spec.ts".
 ```
-
-> `npm run test:e2e` command doesn't work at the moment because of conflicts when chaining e2e tests. We're working on this case.

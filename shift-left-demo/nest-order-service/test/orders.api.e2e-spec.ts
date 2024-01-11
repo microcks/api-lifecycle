@@ -57,16 +57,9 @@ describe('OrderController (e2e)', () => {
         timeout: 3000
       };
 
-      /*
-      (await container.logs())
-        .on("data", line => console.log(line))
-        .on("err", line => console.error(line))
-        .on("end", () => console.log("Stream closed"));
-      */
-
       var testResult = await container.testEndpoint(testRequest);
 
-      console.log(JSON.stringify(testResult));
+      console.log(JSON.stringify(testResult, null, 2));
 
       expect(testResult.success).toBe(true);
       expect(testResult.testCaseResults.length).toBe(1);
