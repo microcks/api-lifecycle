@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class PastryAPIClientJUnit4Tests {
 
    @ClassRule
-   public static MicrocksContainer microcksContainer = new MicrocksContainer("quay.io/microcks/microcks-uber:nightly");
+   public static MicrocksContainer microcksContainer = new MicrocksContainer("quay.io/microcks/microcks-uber:1.8.1");
 
    @Autowired
    PastryAPIClient client;

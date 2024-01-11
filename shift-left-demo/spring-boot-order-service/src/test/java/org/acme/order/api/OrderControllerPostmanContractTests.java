@@ -27,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class OrderControllerPostmanContractTests {
 
    @Container
-   public static MicrocksContainersEnsemble microcksEnsemble = new MicrocksContainersEnsemble("quay.io/microcks/microcks-uber:1.8.0")
-         .withAccessToHost(true);
+   public static MicrocksContainersEnsemble microcksEnsemble = new MicrocksContainersEnsemble("quay.io/microcks/microcks-uber:1.8.1")
+         .withAccessToHost(true)
+         .withPostman();
 
    @LocalServerPort
    private Integer port;

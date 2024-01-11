@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 public class OrderControllerContractJUnit4Tests {
 
    @ClassRule
-   public static MicrocksContainer microcksContainer = new MicrocksContainer("quay.io/microcks/microcks-uber:nightly")
+   public static MicrocksContainer microcksContainer = new MicrocksContainer("quay.io/microcks/microcks-uber:1.8.1")
          .withAccessToHost(true);
 
    @LocalServerPort
