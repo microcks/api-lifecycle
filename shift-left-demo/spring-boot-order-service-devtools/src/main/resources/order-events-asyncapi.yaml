@@ -1,0 +1,105 @@
+asyncapi: '2.6.0'
+id: 'urn:io.microcks.example.pastry-orders'
+info:
+  title: Order Events API
+  version: 0.1.0
+  description: Simple AsyncAPI for order events
+defaultContentType: application/json
+channels:
+  orders-created:
+    description: The topic on which created orders events may be consumed
+    subscribe:
+      summary: Receive informations about pastry orders events
+      operationId: receivedOrderEvents
+      message:
+        $ref: '#/components/messages/OrderEvent'
+  orders-reviewed:
+    description: The topic on which reviewed pastry orders events may be published
+    publish:
+      summary: Send information about pastry orders events
+      operationId: sentOrderEvents
+      message:
+        $ref: '#/components/messages/OrderEvent'
+components:
+  messages:
+    OrderEvent:
+      payload:
+        type: object
+        additionalProperties: false
+        required:
+          - timestamp
+          - order
+          - changeReason
+        properties:
+          timestamp:
+            description: The timestamp when the change occurs
+            type: number
+          order:
+            description: The Order related to this event
+            $ref: '#/components/schemas/Order'
+          changeReason:
+            description: The reason we change this order
+            type: string
+      examples:
+        - Validated OrderEvent:
+            payload:
+              timestamp: 1706087114133
+              order:
+                id: 123-456-789
+                customerId: lbroudoux
+                status: VALIDATED
+                productQuantities:
+                  - productName: Croissant
+                    quantity: 1
+                  - productName: Pain Chocolat
+                    quantity: 1
+                totalPrice: 4.2
+              changeReason: Validation
+  schemas:
+    Order:
+      payload:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - customerId
+          - status
+          - productQuantities
+          - totalPrice
+        properties:
+          id:
+            description: Unique identifier of order (guid)
+            type: string
+          customerId:
+            description: Identifier of customer of this order (guid)
+            type: string
+          status:
+            description: Status of Order
+            enum:
+              - CREATED
+              - VALIDATED
+              - CANCELED
+              - FAILED
+            type: string
+          productQuantities:
+            description: Desired products and quantities for this order
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductQuantity'
+          totalPrice:
+            format: double
+            description: Total price of the order
+            type: number
+    ProductQuantity:
+      type: object
+      additionalProperties: false
+      required:
+        - quantity
+        - productName
+      properties:
+        quantity:
+          description: Desired quantity
+          type: integer
+        pastryName:
+          description: Desired pastry name
+          type: string
