@@ -145,5 +145,5 @@ jobs:
 
       - name: Build Java components
         run: |
-          cd spring-boot-order-service-devtools
+          cd shift-left-demo/spring-boot-order-service-devtools
           mvn -B clean package
