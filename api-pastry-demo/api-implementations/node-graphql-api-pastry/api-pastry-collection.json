@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3bed6990-dd80-4009-9743-880bd8a4d806",
+		"_postman_id": "949dc025-9619-4ebb-b9c6-c004f2e0fdde",
 		"name": "Pastry Graph API",
 		"description": "version=1.0 - A Graph API for querying pastries",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -35,7 +35,13 @@
 							"name": "Millefeuille",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -69,7 +75,13 @@
 							"name": "Eclair Chocolat",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -126,7 +138,13 @@
 							"name": "pastries_m",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -154,13 +172,19 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"data\": {\n        \"pastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Eclair Cafe\",\n                    \"description\": \"Delicieux Eclair au Cafe pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.5,\n                    \"status\": \"available\",\n                    \"rating\": 4.2,\n                    \"reviews\": 405\n                },\n                {\n                    \"name\": \"Eclair Chocolat\",\n                    \"description\": \"Delicieux Eclair au Chocolat pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.4,\n                    \"status\": \"unknown\",\n                    \"rating\": 4.4,\n                    \"reviews\": 302\n                },\n                {\n                    \"name\": \"Divorces\",\n                    \"description\": \"Delicieux Divorces pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.8,\n                    \"status\": \"available\",\n                    \"rating\": 3.2,\n                    \"reviews\": 36\n                }\n            ],\n            \"count\": 3\n        }\n    }\n}"
+							"body": "{\n    \"data\": {\n        \"pastries\": {\n            \"pastries\": [\n                {\n                    \"name\": \"Eclair Cafe\",\n                    \"description\": \"Delicieux Eclair au Cafe pas calorique du tout {{guid()}}\",\n                    \"size\": \"{{request.body/variables/size}}\",\n                    \"price\": 2.5,\n                    \"status\": \"available\",\n                    \"rating\": 4.2,\n                    \"reviews\": 405\n                },\n                {\n                    \"name\": \"Eclair Chocolat\",\n                    \"description\": \"Delicieux Eclair au Chocolat pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.4,\n                    \"status\": \"unknown\",\n                    \"rating\": 4.4,\n                    \"reviews\": 302\n                },\n                {\n                    \"name\": \"Divorces\",\n                    \"description\": \"Delicieux Divorces pas calorique du tout\",\n                    \"size\": \"M\",\n                    \"price\": 2.8,\n                    \"status\": \"available\",\n                    \"rating\": 3.2,\n                    \"reviews\": 36\n                }\n            ],\n            \"count\": 3\n        }\n    }\n}"
 						},
 						{
 							"name": "pastries_s",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -194,7 +218,13 @@
 							"name": "pastries_l",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -251,7 +281,13 @@
 							"name": "allPastries",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -313,7 +349,13 @@
 							"name": "Awesome Baba Rhum",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {
@@ -347,7 +389,13 @@
 							"name": "Delicious Tartelette",
 							"originalRequest": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "graphql",
 									"graphql": {

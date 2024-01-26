@@ -85,7 +85,7 @@ var root = {
   allPastries: (req) => {
     console.log("In allPastries handler");
     return {
-      count: pastries.length,
+      //count: pastries.length,
       pastries: pastries
     }
   },

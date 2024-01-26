@@ -16,7 +16,7 @@ operations:
         "operator": "equals",
         "cases": {
           "Baba Rhum": "Awesome Baba Rhum",
-          "Tartelette Fraise": "Delicious Tartelette Fraise",
+          "Tartelette Fraise": "Delicious Tartelette",
           "default": "Awesome Baba Rhum"
         }
       }
