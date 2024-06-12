@@ -43,6 +43,15 @@ jobs:
           BUILDER=buildx-multi-arch
           docker buildx inspect $BUILDER || docker buildx create --name=$BUILDER --driver=docker-container --driver-opt=network=host
 
+      - name: Set up JDK 17 for x64
+        #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          architecture: x64
+          cache: maven
+
       - name: Build and push container image
         #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         run: |
