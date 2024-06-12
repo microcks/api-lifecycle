@@ -29,22 +29,22 @@ jobs:
               - 'grpc-hello-world-demo/**'
       
       - name: Set up QEMU
-        if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
+        #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
+        #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         uses: docker/setup-buildx-action@v2
 
       - name: Login to Quay.io Registry and setup multi-arch builder
-        if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
+        #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         run: |
           echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_USERNAME }} --password-stdin quay.io
           BUILDER=buildx-multi-arch
           docker buildx inspect $BUILDER || docker buildx create --name=$BUILDER --driver=docker-container --driver-opt=network=host
 
       - name: Build and push container image
-        if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
+        #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         run: |
           cd grpc-hello-world-demo
           mvn -B package -Pnative -Dquarkus.native.container-build=true
@@ -180,6 +180,7 @@ jobs:
               - 'shift-left-demo/spring-boot-order-service-devtools/**'
 
       - name: Set up JDK 17 for x64
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.shift-left-demo-sb == 'true'
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -188,6 +189,7 @@ jobs:
           cache: maven
 
       - name: Build Java components
+        if: github.repository_owner == 'microcks' && steps.changes.outputs.shift-left-demo-sb == 'true'
         run: |
           cd shift-left-demo/spring-boot-order-service-devtools
           mvn -B clean package
