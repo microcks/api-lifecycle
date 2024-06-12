@@ -49,7 +49,7 @@ jobs:
           cd grpc-hello-world-demo
           mvn -B package -Pnative -Dquarkus.native.container-build=true
           docker buildx build --push \
-            --platform=linux/amd64,linux/arm64 \
+            --platform=linux/amd64 \
             --builder=buildx-multi-arch \
             --provenance=false \
             --build-arg TAG=latest \
