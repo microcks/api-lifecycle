@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.github.microcks.samples";
+option java_outer_classname = "HelloGrpcProto";
+
+package io.github.microcks.grpc.hello.v1;
+
+message HelloRequest {
+    string firstname = 1;
+    string lastname = 2;
+}
+
+message HelloResponse {
+    string greeting = 1;
+}
+
+service HelloService {
+    rpc greeting(HelloRequest) returns (HelloResponse);
+}
