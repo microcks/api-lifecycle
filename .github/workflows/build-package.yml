@@ -62,7 +62,7 @@ jobs:
             --builder=buildx-multi-arch \
             --provenance=false \
             --build-arg TAG=nightly \
-            --file src/main/docker/Dockerfile.native \
+            --file src/main/docker/Dockerfile.jvm \
             --tag=quay.io/microcks/grpc-hello-world:nightly .
 
   build-package-contract-testing:
