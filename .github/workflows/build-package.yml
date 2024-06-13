@@ -56,14 +56,14 @@ jobs:
         #if: github.repository_owner == 'microcks' && steps.changes.outputs.grpc-hello-world == 'true'
         run: |
           cd grpc-hello-world-demo
-          mvn -B package -Pnative -Dquarkus.native.container-build=true
+          mvn -B package
           docker buildx build --push \
-            --platform=linux/amd64 \
+            --platform=linux/amd64,linux/arm64 \
             --builder=buildx-multi-arch \
             --provenance=false \
-            --build-arg TAG=latest \
+            --build-arg TAG=nightly \
             --file src/main/docker/Dockerfile.native \
-            --tag=quay.io/microcks/grpc-hello-world:latest .
+            --tag=quay.io/microcks/grpc-hello-world:nightly .
 
   build-package-contract-testing:
     runs-on: ubuntu-latest
