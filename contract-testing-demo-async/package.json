@@ -13,6 +13,6 @@
   "author": "laurent.broudoux@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "ws": "^7.4.6"
+    "ws": "^7.5.10"
   }
 }
