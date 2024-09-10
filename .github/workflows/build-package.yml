@@ -4,15 +4,13 @@ on:
     paths-ignore:
       - '.gitignore'
       - 'LICENSE'
-      - 'README*'
-      - 'CODE_OF_CONDUCT*'
+      - '*.md'
   pull_request:
     paths-ignore:
       - '.github/**'
       - '.gitignore'
       - 'LICENSE'
-      - 'README*'
-      - 'CODE_OF_CONDUCT*'
+      - '*.md'
 jobs:
   build-package-grpc-hello:
     runs-on: ubuntu-latest
