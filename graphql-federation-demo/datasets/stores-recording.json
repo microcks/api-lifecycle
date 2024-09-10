@@ -1,0 +1,146 @@
+{
+  "log": {
+    "entries": [
+      {
+        "request": {
+          "httpVersion": "HTTP\/1.1",
+          "headersSize": 176,
+          "headers": [
+            {
+              "value": "localhost.proxyman.io:8585",
+              "name": "Host"
+            },
+            {
+              "value": "curl\/8.1.2",
+              "name": "User-Agent"
+            },
+            {
+              "name": "Accept",
+              "value": "*\/*"
+            },
+            {
+              "value": "Keep-Alive",
+              "name": "Connection"
+            },
+            {
+              "value": "application\/json",
+              "name": "Content-Type"
+            },
+            {
+              "value": "197",
+              "name": "Content-Length"
+            }
+          ],
+          "postData": {
+            "mimeType": "application\/json",
+            "params": [
+              {
+                "name": "{ \"query\":  \"query pastrySells ($storeId: ID!) {     pastrySells (storeId: $storeId) {       pastryId       sellsCount       monthYear       storeId     }  }\",  \"variables\": {    \"storeId\": \"2\"  }}",
+                "value": ""
+              }
+            ],
+            "text": "{ \"query\":  \"query pastrySells ($storeId: ID!) {     pastrySells (storeId: $storeId) {       pastryId       sellsCount       monthYear       storeId     }  }\",  \"variables\": {    \"storeId\": \"2\"  }}"
+          },
+          "queryString": [],
+          "cookies": [],
+          "method": "POST",
+          "url": "http:\/\/localhost.proxyman.io:8585\/graphql\/Store+Graph\/1.0",
+          "bodySize": 197
+        },
+        "_clientName": "curl",
+        "serverIPAddress": "127.0.0.1",
+        "cache": {},
+        "_isHTTPS": false,
+        "_serverAddress": "127.0.0.1",
+        "_clientBundlePath": "\/usr\/bin\/curl",
+        "_remoteDeviceIP": null,
+        "timings": {
+          "connect": 1,
+          "send": -1,
+          "ssl": -1,
+          "blocked": -1,
+          "dns": -1,
+          "wait": -1,
+          "receive": -1
+        },
+        "startedDateTime": "2024-08-29T13:53:28.588Z",
+        "response": {
+          "status": 200,
+          "redirectURL": "",
+          "statusText": "OK",
+          "cookies": [],
+          "content": {
+            "text": "eyJkYXRhIjp7InBhc3RyeVNlbGxzIjpbeyJzdG9yZUlkIjoiMiIsInNlbGxzQ291bnQiOjE5OSwibW9udGhZZWFyIjoiMDgvMjQiLCJwYXN0cnlJZCI6IkVjbGFpci1DYWZlIn0seyJzdG9yZUlkIjoiMiIsInNlbGxzQ291bnQiOjE1NywibW9udGhZZWFyIjoiMDgvMjQiLCJwYXN0cnlJZCI6Ik1pbGxlZmV1aWxsZSJ9LHsic3RvcmVJZCI6IjIiLCJzZWxsc0NvdW50Ijo0NjksIm1vbnRoWWVhciI6IjA4LzI0IiwicGFzdHJ5SWQiOiJUYXJ0ZWxldHRlLUZyYWlzZSJ9XX19",
+            "mimeType": "application\/json",
+            "encoding": "base64",
+            "size": 267
+          },
+          "bodySize": 267,
+          "headers": [
+            {
+              "name": "Content-Disposition",
+              "value": "inline;filename=f.txt"
+            },
+            {
+              "value": "nosniff",
+              "name": "X-Content-Type-Options"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "value": "no-cache",
+              "name": "Pragma"
+            },
+            {
+              "value": "0",
+              "name": "Expires"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application\/json"
+            },
+            {
+              "name": "Content-Length",
+              "value": "267"
+            },
+            {
+              "value": "Thu, 29 Aug 2024 13:53:28 GMT",
+              "name": "Date"
+            },
+            {
+              "name": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "httpVersion": "HTTP\/1.1",
+          "headersSize": 348
+        },
+        "time": 36.75389,
+        "_clientPort": 62626,
+        "_name": "187",
+        "_isIntercepted": true,
+        "_webSocketMessages": null,
+        "_serverPort": 8585,
+        "_id": "187",
+        "_clientAddress": "127.0.0.1",
+        "comment": ""
+      }
+    ],
+    "version": "1.2",
+    "creator": {
+      "name": "Proxyman",
+      "version": "5.7.0"
+    },
+    "comment": "microcksId: Store Graph:1.0 \n apiPrefix: /graphql/Store+Graph/1.0"
+  }
+}

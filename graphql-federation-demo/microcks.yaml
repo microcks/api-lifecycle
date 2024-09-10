@@ -1,0 +1,23 @@
+services:
+  importer:
+    depends_on:
+      - microcks
+    restart: on-failure
+    image: quay.io/microcks/microcks-cli:latest
+    volumes:
+      - "./contracts:/con"
+      - "./datasets:/data"
+    entrypoint:
+      - microcks-cli
+      - import
+      - '/con/apipastries-openapi.yaml:true,/con/chiefs-service.proto:true,/con/stores-graph.graphql:true,/data/apipastries-postman-collection.json:false,/data/apipastries-examples.yaml:false,/data/chiefs-examples.yaml:false,/data/stores-examples.yaml:false,/data/stores-recording.json:false'
+      - --microcksURL=http://microcks:8080/api
+      - --insecure
+      - --keycloakClientId=foo
+      - --keycloakClientSecret=bar
+
+  microcks:
+    image: quay.io/microcks/microcks-uber:nightly-native
+    ports:
+      - "8585:8080"
+      - "8686:9090"

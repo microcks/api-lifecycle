@@ -1,0 +1,38 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: API Pastries
+  version: '0.0.1'
+operations:
+  'GET /pastries':
+    pastries_xl:
+      request:
+        parameters:
+          size: XL
+      response:
+        status: 200
+        mediaType: application/json
+        body:
+          - name: Paris-Brest
+            description: Delicieux Paris-Brest calorique du tout
+            size: '{{ request.params[size] }}'
+            price: 5.1
+            status: '{{ randomValue(available,out_of_stock) }}'
+            chiefId: 3
+  'GET /pastries/{name}':
+    Paris-Brest:
+      request:
+        parameters:
+          name: Paris-Brest
+      response:
+        status: 200
+        mediaType: application/json
+        body: |-
+          {
+            "name": "Paris-Brest",
+            "description": "Delicieux Paris-Brest calorique du tout",
+            "size": "XL",
+            "price": 5.1,
+            "status": "available",
+            "chiefId": 3
+          }

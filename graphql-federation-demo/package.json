@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "start": "mesh dev",
+    "build": "echo \"noop\";",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@graphql-mesh/cli": "^0.95.4",
+    "@graphql-mesh/graphql": "^0.102.4",
+    "@graphql-mesh/grpc": "^0.104.5",
+    "@graphql-mesh/openapi": "^0.106.6",
+    "@graphql-mesh/transform-filter-schema": "^0.102.4",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@microcks/microcks-testcontainers": "^0.2.5",
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2"
+  }
+}

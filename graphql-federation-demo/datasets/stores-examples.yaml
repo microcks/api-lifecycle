@@ -1,0 +1,126 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: Store Graph
+  version: '1.0'
+operations:
+  stores:
+    All stores:
+      request:
+        body:
+          query: |-
+            query {
+              stores {
+                id
+                name
+                location
+              }
+            }
+      response:
+        mediaType: application/json
+        body:
+          data:
+            stores:
+              - id: '0'
+                name: Patisseries Françaises
+                location: 'Paris, France'
+              - id: '1'
+                name: French Pastries & Co
+                location: 'San Francisco, California, United States'
+              - id: '2'
+                name: Froggy Bakeries
+                location: 'London, Great Britains'
+  pastrySells:
+    'store 0':
+      request:
+        body:
+          variables:
+            storeId: '0'
+          query: |-
+            query pastrySells ($storeId: ID!) {
+              pastrySells (storeId: $storeId) {
+                pastryId
+                sellsCount
+                monthYear
+                storeId
+              }
+            }
+      response:
+        mediaType: application/json
+        body:
+          data:
+            pastrySells:
+              - storeId: '0'
+                sellsCount: 280
+                monthYear: '08/24'
+                pastryId: 'Eclair-Cafe'
+              - storeId: '0'
+                sellsCount: 390
+                monthYear: '08/24'
+                pastryId: 'Millefeuille'
+              - storeId: '0'
+                sellsCount: 326
+                monthYear: '08/24'
+                pastryId: 'Tartelette-Fraise'
+    'store 1':
+      request:
+        body:
+          variables:
+            storeId: '1'
+          query: |-
+            query pastrySells ($storeId: ID!) {
+              pastrySells (storeId: $storeId) {
+                pastryId
+                sellsCount
+                monthYear
+                storeId
+              }
+            }
+      response:
+        mediaType: application/json
+        body:
+          data:
+            pastrySells:
+              - storeId: '1'
+                sellsCount: 342
+                monthYear: '08/24'
+                pastryId: 'Eclair-Cafe'
+              - storeId: '1'
+                sellsCount: 123
+                monthYear: '08/24'
+                pastryId: 'Millefeuille'
+              - storeId: '1'
+                sellsCount: 212
+                monthYear: '08/24'
+                pastryId: 'Tartelette-Fraise'
+    # 'store 2':
+    #   request:
+    #     body:
+    #       variables:
+    #         storeId: '2'
+    #       query: |-
+    #         query pastrySells ($storeId: ID!) {
+    #           pastrySells (storeId: $storeId) {
+    #             pastryId
+    #             sellsCount
+    #             monthYear
+    #             storeId
+    #           }
+    #         }
+    #   response:
+    #     mediaType: application/json
+    #     body:
+    #       data:
+    #         pastrySells:
+    #           - storeId: '2'
+    #             sellsCount: 199
+    #             monthYear: '08/24'
+    #             pastryId: 'Eclair-Cafe'
+    #           - storeId: '2'
+    #             sellsCount: 157
+    #             monthYear: '08/24'
+    #             pastryId: 'Millefeuille'
+    #           - storeId: '2'
+    #             sellsCount: 469
+    #             monthYear: '08/24'
+    #             pastryId: 'Tartelette-Fraise'

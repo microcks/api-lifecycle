@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package io.microcks.chiefs.v1;
+
+message GetChiefRequest {
+    int32 id = 1;
+}
+
+message Chief {
+    int32 id = 1;
+    string name = 2;
+    string region = 3;
+}
+
+message ListChiefsRequest {}
+
+message ChiefsResponse {
+    repeated Chief chiefs = 1;
+}
+
+service ChiefsService {
+    rpc GetChief(GetChiefRequest) returns (Chief);
+    rpc ListChiefs(ListChiefsRequest) returns (ChiefsResponse);
+}

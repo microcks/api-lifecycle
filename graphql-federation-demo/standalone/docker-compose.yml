@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  app:
+    image: quay.io/microcks/microcks-uber:nightly
+    container_name: microcks
+    volumes:
+      - "./config:/deployments/config"
+      - "./data:/deployments/data"
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - SPRING_PROFILES_ACTIVE=uber
+      - TEST_CALLBACK_URL=http://microcks:8080
+      - SERVICES_UPDATE_INTERVAL=0 0 0/2 * * *
+      - MONGODB_STORAGE_PATH=/deployments/data/microcks.mv
+      #- MAX_UPLOAD_FILE_SIZE=3MB

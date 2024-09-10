@@ -1,0 +1,18 @@
+# microcksId: Store Graph : 1.0
+type Store {
+  id: ID!
+  name: String!
+  location: String!
+}
+
+type Sells {
+  pastryId: ID!
+  sellsCount: Int!
+  monthYear: String
+  storeId: ID!
+}
+
+type Query {
+  stores: [Store!]!
+  pastrySells(storeId: ID!): [Sells!]!
+}

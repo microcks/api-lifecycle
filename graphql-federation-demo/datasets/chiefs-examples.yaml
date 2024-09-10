@@ -1,0 +1,53 @@
+apiVersion: mocks.microcks.io/v1alpha1
+kind: APIExamples
+metadata:
+  name: io.microcks.chiefs.v1.ChiefsService
+  version: v1
+operations:
+  GetChief:
+    Cyril Lignac:
+      request:
+        body:
+          id: 1
+      response:
+        body:
+          id: 1
+          name: Cyril Lignac
+          region: Languedoc
+    Christophe Michalak:
+      request:
+        body:
+          id: 2
+      response:
+        body:
+          id: 2
+          name: Christophe Michalak
+          region: Ile de France
+    Silamaka Soukouna:
+      request:
+        body:
+          id: 3
+      response:
+        body: |
+          {
+            "id": 3,
+            "name": "Silamaka Soukouna",
+            "region": "Mali"
+          }
+  ListChiefs:
+    All Chiefs:
+      request:
+        body: ""
+      response:
+        body:
+          chiefs:
+            - id: 1
+              name: Cyril Lignac
+              region: Languedoc
+            - id: 2
+              name: Christophe Michalak
+              region: Ile de France
+            - id: 3
+              name: Silamaka Soukouna
+              region: Mali
+

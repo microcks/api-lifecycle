@@ -1,0 +1,60 @@
+sources:
+  - name: Pastries
+    handler:
+      openapi:
+        source: ./contracts/apipastries-openapi.yaml
+        #endpoint: http://localhost:8080/rest/API+Pastries/0.0.1
+        endpoint: http://localhost:8585/rest/API+Pastries/0.0.1
+  - name: Chiefs
+    handler:
+      grpc:
+        source: ./contracts/chiefs-service.proto
+        #endpoint: localhost:9090
+        endpoint: localhost:8686
+  - name: Stores
+    handler:
+      graphql:
+        source: ./contracts/stores-graph.graphql
+        #endpoint: http://localhost:8080/graphql/Store+Graph/1.0
+        endpoint: http://localhost:8585/graphql/Store+Graph/1.0
+        
+
+transforms:
+  - filterSchema:
+      filters:
+        - Query.stores
+
+additionalTypeDefs: |
+  extend type Store {
+    pastrySells: [Sells!]! @resolveTo(
+      sourceName: "Stores",
+      sourceTypeName: "Query",
+      sourceFieldName: "pastrySells",
+      requiredSelectionSet: "{ id }",
+      sourceArgs: {
+        storeId: "{root.id}"
+      }
+    )
+  }
+  extend type Sells {
+    pastry: Pastry @resolveTo(
+      sourceName: "Pastries",
+      sourceTypeName: "Query",
+      sourceFieldName: "GetPastryByName",
+      requiredSelectionSet: "{ pastryId }",
+      sourceArgs: {
+        name: "{root.pastryId}"
+      }
+    )
+  }
+  extend type Pastry {
+    chief: io__microcks__chiefs__v1__Chief @resolveTo(
+      sourceName: "Chiefs"                                  
+      sourceTypeName: "Query",       
+      sourceFieldName: "io_microcks_chiefs_v1_ChiefsService_GetChief",
+      requiredSelectionSet: "{ chiefId }",
+      sourceArgs: { 
+        input: { id: "{root.chiefId}" }
+      }
+    )
+  }
