@@ -1,6 +1,5 @@
-bases:
-- ../../base
-patchesStrategicMerge:
-- microcks-instance.yaml 
 resources:
+- ../../base
 - microcks-apisource.yaml
+patches:
+- microcks-instance.yaml 
