@@ -11,3 +11,4 @@ spec:
         value: "false"
   keycloak:
     install: false
+    url: keycloak.m.minikube.local
