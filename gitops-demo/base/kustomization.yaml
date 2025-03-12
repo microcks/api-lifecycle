@@ -1,2 +1,3 @@
 resources:
+- microcks-operator.yaml
 - microcks-instance.yaml
