@@ -1,0 +1,13 @@
+apiVersion: microcks.io/v1alpha1
+kind: Microcks
+metadata:
+  name: microcks
+spec:
+  version: 1.11.1
+  microcks:
+    url: microcks.m.minikube.local
+    env:
+      - name: KEYCLOAK_ENABLED
+        value: "false"
+  keycloak:
+    install: false

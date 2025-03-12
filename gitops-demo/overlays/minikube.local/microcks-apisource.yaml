@@ -1,0 +1,17 @@
+apiVersion: microcks.io/v1alpha1
+kind: APISource
+metadata:
+  name: tests-artifacts
+  annotations:
+    microcks.io/instance: microcks
+spec:
+  artifacts:
+    - url: https://raw.githubusercontent.com/microcks/microcks/master/samples/APIPastry-openapi.yaml
+      mainArtifact: true
+    #- url: https://raw.githubusercontent.com/microcks/microcks/master/samples/hello-v1.proto
+    #  mainArtifact: true
+    #- url: https://raw.githubusercontent.com/microcks/microcks/master/samples/HelloService.metadata.yml
+    #  mainArtifact: false
+    #- url: https://raw.githubusercontent.com/microcks/microcks/master/samples/HelloService.postman.json
+    #  mainArtifact: false
+EOF
