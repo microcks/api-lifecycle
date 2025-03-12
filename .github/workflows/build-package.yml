@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Filter contract-testing
+      - name: Filter grpc-hello-world
         uses: dorny/paths-filter@v2
         id: changes
         with:
