@@ -2,4 +2,4 @@ resources:
 - ../../base
 - microcks-apisource.yaml
 patches:
-- microcks-instance.yaml 
+- patch: microcks-instance.yaml 
