@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apipastries-app-03
+  labels:
+    app: apipastries-app-03
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apipastries-app-03
+  template:
+    metadata:
+      labels:
+        app: apipastries-app-03
+    spec:
+      containers:
+        - name: apipastries-app-03
+          image: quay.io/microcks/contract-testing-demo:03
+          ports:
+            - name: http
+              containerPort: 3003
+              protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: apipastries-app-03
+  labels:
+    app: apipastries-app-03
+spec:
+  selector:
+    app: apipastries-app-03
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
+  type: ClusterIP
+  sessionAffinity: None
+  
