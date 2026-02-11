@@ -8,11 +8,11 @@ services:
       - "./contracts:/con"
       - "./datasets:/data"
     entrypoint:
-      - microcks-cli
+      - microcks
       - import
       - '/con/apipastries-openapi.yaml:true,/con/chiefs-service.proto:true,/con/stores-graph.graphql:true,/data/apipastries-postman-collection.json:false,/data/apipastries-examples.yaml:false,/data/chiefs-examples.yaml:false,/data/stores-examples.yaml:false,/data/stores-recording.json:false'
       - --microcksURL=http://microcks:8080/api
-      - --insecure
+      - --insecure-tls
       - --keycloakClientId=foo
       - --keycloakClientSecret=bar
 
